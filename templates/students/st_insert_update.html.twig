@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{name}}{% endblock %}
+{% block body %}
+<div class="container mt-3 mb-3">
+    <div class="row ml-5">
+        <div class="col-12">
+           <a href="{{ path('Student',{'st':Page}) }}" class="btn-warning btn"> back to page</a>
+        </div>
+    </div>
+</div>
+{%if name =='Insert'%}
+{%form_theme form 'bootstrap_4_layout.html.twig'%}
+    {{form_start(form)}}
+    {{form_widget(form)}}
+        <button class="btn btn-success mt-3">Insert</button>
+    {{form_end(form)}}
+{% elseif name=='Update'%}
+<form action="" >
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-4">
+        <img class="card-img-top" src="data:image/*;base64,{{student.getImage()}}" alt="Card image cap">
+        </div>
+        <div class="col-6">
+        <div class="row">
+            <div class="col-12">
+               <label>First Name </label>
+               <input id="First" name='First' type="text" class=" btn-default form-control" value="{{student.getFirstName()}}">
+            </div>
+            <div class="col-12">
+            <label>Last Name </label>
+               <input id="Last" name='Last' type="text" class=" btn-default form-control" value="{{student.getLastName()}}">
+            </div>
+            <div class="col-12">
+            <label>Date of birth </label>
+               <input id="date" name='Date' type="date" class=" btn-default form-control" value="{{student.getDateOfBirth()|date('Y-m-d')}}">
+            </div>
+            <div class="col-12">
+                <button class="btn btn-success mt-3">Update</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+</form>
+{%endif%}
+{% endblock %}
+

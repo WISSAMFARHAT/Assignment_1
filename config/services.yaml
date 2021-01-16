@@ -1,0 +1,93 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: "../src/"
+        exclude:
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
+            - "../src/Tests/"
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: "../src/Controller/"
+        tags: ["controller.service_arguments"]
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Subscript\subscriber:
+        tags: { name: "doctrine.event_subscriber", connection: default }
+    admin.student:
+        class: App\Admin\StudentAdmin
+        arguments: [~, App\Entity\Student, ~]
+        tags:
+            - {
+                  name: sonata.admin,
+                  manager_type: orm,
+                  group: admin,
+                  label: Student,
+              }
+        public: true
+
+    admin.clase:
+        class: App\Admin\ClaseAdmin
+        arguments: [~, App\Entity\Clase, ~]
+        tags:
+            - {
+                  name: sonata.admin,
+                  manager_type: orm,
+                  group: admin,
+                  label: Clase,
+              }
+        public: true
+
+    admin.course:
+        class: App\Admin\CourseAdmin
+        arguments: [~, App\Entity\Course, ~]
+        tags:
+            - {
+                  name: sonata.admin,
+                  manager_type: orm,
+                  group: admin,
+                  label: Course,
+              }
+        public: true
+
+    # admin.students_grade:
+    #    class: App\Admin\StudentsGradeAdmin
+    #   arguments: [~, App\Entity\StudentsGrade, ~]
+    #  tags:
+    #     - {
+    #          name: sonata.admin,
+    #         manager_type: orm,
+    #        group: admin,
+    #       label: StudentsGrade,
+    #  }
+    # public: true
+
+    admin.base_entity:
+        class: App\Admin\BaseEntityAdmin
+        arguments: [~, App\Entity\BaseEntity, ~]
+        tags:
+            - {
+                  name: sonata.admin,
+                  manager_type: orm,
+                  group: admin,
+                  label: BaseEntity,
+              }
+        public: true

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{name}}{% endblock %}
+{% block body %}
+<div class="container mt-3 mb-3">
+    <div class="row ml-5">
+        <div class="col-12">
+           <a href="{{ path('Student',{'st':'Courses'}) }}" class="btn-warning btn"> back </a>
+        </div>
+    </div>
+</div>
+{%if name =='Insert'%}
+{%form_theme form 'bootstrap_4_layout.html.twig'%}
+    {{form_start(form)}}
+    {{form_widget(form)}}
+        <button class="btn btn-success mt-3">Insert</button>
+    {{form_end(form)}}
+{% elseif name=='Update'%}
+{%form_theme editForm 'bootstrap_4_layout.html.twig'%}
+
+    {{form_start(editForm)}}
+    {{form_widget(editForm)}}
+    <button class="btn btn-success mt-3">Update</button>
+    {{form_end(editForm)}}
+{%endif%}
+{% endblock %}
+

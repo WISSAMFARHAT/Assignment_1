@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{name}}{% endblock %}
+{% block body %}
+{% if name =='students'%}
+<div class="container mt-5">
+    <div class="row">
+    <div class="col-12">
+        <form action="{{ path('Filter',{'student':'filter','filter':'students'})}}">
+            <div class="form-group" >
+                <label class="control-label">Search By
+                <select name="type" id="type" class="mb-3">
+                <option value="First_Name">First Name</option>
+                <option value="Last_Name">Last Name</option>
+                <option value="course">course</option>
+                </select>
+                </label>
+            </div>
+            <div class="input-group">
+                <input id="text" name='input' type="text" class=" btn-default form-control">
+                <button id="text" type="text" class=" btn-primary go inlineinput-group-btn btn ">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-3 mt-1 mb-3 mr-4">
+            <a href="{{ path('new',{'name':'Insert'}) }}"  class="btn btn-dark mt-3">Insert another student</a>
+        </div>
+        <div class="col-3 mt-3 mb-3 ">
+            <a href="{{ path('grade',{'name':'grade'}) }}"  class="btn btn-success">show grade</a>
+        </div>
+      </div>
+    </div>
+    {%for student in stt%}
+     <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+         <div class="card" style="width: 18rem;">
+          <img class="card-img-top " src="data:image/*;base64,{{student.getImage()}}" alt="Card image cap">
+           <div class="card-body">
+           <h5 class="card-title">{{student.getFirstName()}} {{student.getLastName()}}</h5>
+           <p class="card-text">Date of birth :{{student.getDateOfBirth()|date('Y-m-d')}}</p>
+           <a href="{{path('Show',{'id':student.getId()})}}" class="btn btn-primary">Show detail</a>
+           <a  href="{{path('Remove',{'id':student.getId()})}}" class="btn btn-danger">Delete</a>
+           <a href="{{path('update',{'id':student.getId()})}}" class="btn btn-secondary">Edit</a>
+           <a href="{{ path('new_course',{'id':student.getId()}) }}"  class="btn btn-warning mt-3">Insert cours for student</a>
+           </div>
+         </div>
+    </div>
+    {%endfor%}
+    </div>
+</div>
+{%elseif name=='Classes'%}
+<div class="navigation text-center mt-3">
+    {{ knp_pagination_render(Cl)}}
+</div>
+<table class="table mt-5">
+
+<div class="container mt-5">
+    <div class="row">
+        <form action="{{ path('Filter',{'student':'filter','filter':'Classes'})}}">
+     <div class="form-group" >
+            <label class="control-label">Search By
+            <select name="type" id="type" class="mb-3">
+                <option value="Name">Name</option>
+              </select>
+            </label>
+            <div class="input-group">
+                <input id="text" name='input' type="text" class=" btn-default form-control">
+                <button id="text" type="text" class=" btn-primary go inlineinput-group-btn btn ">Search</button>
+            </div>
+     </form>
+        <div class="col-2 mt-3">
+        <a href="{{ path('insert_classes',{'name':"Insert"}) }}" class="btn btn-danger">Add</a>
+        </div>
+    </div>
+</div>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Section</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for classes in Cl%}
+    <tr>
+      <th scope="row">{{classes.getid()}}</th>
+      <td>{{classes.getName()}}</td>
+      <td>{{classes.getSection()}}</td>
+      <td><a href="{{ path('Remove_classes',{'id':classes.getId()}) }}" class="btn btn-danger">Delete</a></td>
+      <td><a href="{{ path('update_classes',{'id':classes.getId()}) }}" class="btn btn-danger">Edit</a></td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+
+{%elseif name=='Courses'%}
+<div class="navigation text-center mt-3 ">
+    {{ knp_pagination_render(Course) }}
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <form action="{{ path('Filter',{'student':'filter','filter':'Courses'})}}">
+     <div class="form-group" >
+            <label class="control-label">Search By
+            <select name="type" id="type" class="mb-3">
+                <option value="Name">Name</option>
+              </select>
+            </label>
+            <div class="input-group">
+                <input id="text" name='input' type="text" class=" btn-default form-control">
+                <button id="text" type="text" class=" btn-primary go inlineinput-group-btn btn ">Search</button>
+            </div>
+     </form>
+        <div class="col-2 mt-3 ">
+        <a href="{{ path('insert_course',{'name':'Insert'}) }}" class="btn btn-danger">Add</a>
+        </div>
+    </div>
+</div>
+<table class="table mt-5">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Descritpion</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for courses in Course%}
+    <tr>
+      <th scope="row">{{courses.getid()}}</th>
+      <td>{{courses.getName()}}</td>
+      <td>{{courses.getDescription()}}</td>
+      <td><a href="{{ path('Remove_course',{'id':courses.getId()}) }}" class="btn btn-danger">Delete</a></td>
+      <td><a href="{{ path('update_course',{'id':courses.getId()}) }}" class="btn btn-danger">Edit</a></td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+
+{%endif%}
+{% endblock %}

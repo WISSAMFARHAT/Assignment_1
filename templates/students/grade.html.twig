@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}grade{% endblock %}
+
+{% block body %}
+<div class="container mt-3 mb-3">
+    <div class="row ml-5">
+     <form action="{{ path('Filter',{'student':'filter','filter':'show'})}}">
+     <div class="form-group" >
+            <label class="control-label">Search By
+            <select name="type" id="type" class="mb-3">
+                <option value="First_Name">First Name</option>
+                <option value="Course">Course</option>
+                <option value="grade">grade</option>
+              </select>
+            </label>
+            <div class="input-group">
+                <input id="text" name='input' type="text" class=" btn-default form-control">
+                <button id="text" type="text" class=" btn-primary go inlineinput-group-btn btn ">Search</button>
+            </div>
+     </form>
+        <div class="col-12 mt-3">
+           <a href="{{ path('Student',{'st':'students'}) }}" class="btn-warning btn"> back to page</a>
+        </div>
+    </div>
+</div>
+
+<table class="table mt-5">
+<thead>
+<tr>
+      <th scope="col">#</th>
+      <th scope="col">First_Name</th>
+      <th scope="col">Last_Name</th>
+      <th scope="col">Course</th>
+      <th scope="col">grade</th>
+</tr>
+  </thead>
+  <tbody>
+  {% for grades in grade%}
+    <tr>
+      <th scope="row">{{grades.id}}</th>
+      <td>{{grades.First_Name}}</td>
+      <td>{{grades.Last_Name}}</td>
+      <td>{{grades.Name}}</td>
+      <td>{{grades.Grade}}</td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+{% endblock %}

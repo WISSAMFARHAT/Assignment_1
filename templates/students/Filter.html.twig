@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Filter{% endblock %}
+
+{% block body %}
+<div class="container mt-3 mb-3">
+    <div class="row ml-5">
+        <div class="col-12">
+        {%if type=='grade'%}
+        <a href="{{ path('grade',{'name':'grade'}) }}" class="btn-warning btn"> back to page</a>
+        {%else%}
+           <a href="{{ path('Student',{'st':type}) }}" class="btn-warning btn"> back to page</a>
+        {%endif%}
+        </div>
+    </div>
+</div>
+
+<table class="table mt-5">
+<thead>
+{%if type=='Classes'%}
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Section</th>
+    </tr>
+{% elseif type=='Course'%}  
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+    </tr>  
+{% elseif type=='student'%}  
+<tr>
+      <th scope="col">#</th>
+      <th scope="col">First_Name</th>
+      <th scope="col">Last_Name</th>
+      <th scope="col">Date_of_birth</th>
+      <th scope="col">Course</th>
+</tr>
+{%elseif type=='grade'%}
+<tr>
+      <th scope="col">#</th>
+      <th scope="col">First_Name</th>
+      <th scope="col">Last_Name</th>
+      <th scope="col">Course</th>
+      <th scope="col">grade</th>
+</tr>
+{%endif%}
+  </thead>
+  <tbody>
+{%if type=='Classes'%}
+  {% for filters in filter%}
+    <tr>
+      <th scope="row">{{filters.getid()}}</th>
+      <td>{{filters.getName()}}</td>
+      <td>{{filters.getSection()}}</td>
+    </tr>
+    {%endfor%}
+{% elseif type=='Course'%}
+{% for filters in filter%}
+    <tr>
+      <th scope="row">{{filters.getid()}}</th>
+      <td>{{filters.getName()}}</td>
+      <td>{{filters.getDescription()}}</td>
+    </tr>
+{%endfor%}
+{% elseif type=='students'%}
+{% for filters in filter%}
+    <tr>
+      <th scope="row">{{filters.id}}</th>
+      <td>{{filters.First_Name}}</td>
+      <td>{{filters.Last_Name}}</td>
+      <td>{{filters.Date_of_Birth|date('Y-m-d')}}</td>
+      <td>{{filters.Name}}</td>
+    </tr>
+{%endfor%}
+{%elseif type=='grade'%}
+{% for filters in filter%}
+    <tr>
+      <th scope="row">{{filters.id}}</th>
+      <td>{{filters.First_Name}}</td>
+      <td>{{filters.Last_Name}}</td>
+      <td>{{filters.Name}}</td>
+      <td>{{filters.Grade}}</td>
+    </tr>
+{%endfor%}
+{%endif%}
+  </tbody>
+</table>
+{% endblock %}
