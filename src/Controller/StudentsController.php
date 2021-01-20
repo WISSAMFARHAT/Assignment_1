@@ -30,7 +30,6 @@ class StudentsController extends AbstractController
         ]);
     }
 
-    
 
     /**
      * @Route("/Home/{st}",name="Student")
