@@ -33,9 +33,8 @@ public function preUpdate(LifecycleEventArgs $args){
 
 public function prePersist(LifecycleEventArgs $args)
 {
-    if(method_exists($this, 'setCreated')){
     $args->getEntity()->setCreated((new \DateTimeImmutable()));
-    }
+    
 
 }
 

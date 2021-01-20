@@ -28,12 +28,12 @@ use App\Entity\Clase;
     protected $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime",nullable=true)
      */
     protected $Created;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime",nullable=true)
      */
     protected $Modified;
 
