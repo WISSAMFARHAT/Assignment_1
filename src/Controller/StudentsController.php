@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Clase;
+use App\Entity\Users;
 use App\Entity\Course;
 use App\Entity\Student;
 use App\Form\ClaseType;
@@ -20,8 +21,59 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class StudentsController extends AbstractController
 {
+
+    
     /**
-     * @Route("/", name="home")
+     * @Route("/", name="Login")
+     */
+    public function Login(Request $request): Response
+    {
+        $session = $request->getSession();
+        if(!$session->has('User')){
+        if ($request->get('User_id'))  {
+            if($request->get('pwd')){
+                $username=$request->get('User_id');
+                $pwd=$request->get('pwd');
+                $remember=$request->get('remember_me');
+                $en=$this->getDoctrine()->getManager();
+                $query=$en->createQuery("select U.id from App\Entity\Users U
+                where U.id='".$username."'and U.pwd='".$pwd."'");
+                $result=$query->getResult();
+                if(count($result) >0){                    
+                    $session->set("User",$username);
+                    return $this->render('students/index.html.twig');
+                }else{
+                    $this->addFlash(
+                        'notice',
+                        'incorrect password or email '
+                    );
+                }
+            }else{
+                $this->addFlash(
+                    'notice',
+                    'put a  password '
+                );
+            }
+        }
+    }else{
+        return $this->render('students/index.html.twig');
+    }
+        return $this->render('Login/Login.html.twig');
+     }
+
+    /**
+     * @Route("/logout",name="Logout")
+     */
+    public function Logout(Request $request)
+{
+    $session = $request->getSession();
+    $session->remove('User');
+    $forward = $this->forward('App\Controller\StudentsController::Login');
+     return $forward;
+}
+
+  /**
+     * @Route("/index", name="home")
      */
     public function index(): Response
     {
@@ -29,8 +81,6 @@ class StudentsController extends AbstractController
             'controller_name' => 'StudentsController',
         ]);
     }
-
-
     /**
      * @Route("/Home/{st}",name="Student")
      */
