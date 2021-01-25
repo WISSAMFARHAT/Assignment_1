@@ -19,9 +19,9 @@ final class StudentsGradeAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('student_id')
-            ->add('Clase_id')
-            ->add('Course_id')
-            ->add('Grade')
+            ->add('class_id')
+            ->add('course_id')
+            ->add('grade')
             ;
     }
 
@@ -29,9 +29,9 @@ final class StudentsGradeAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('Student.id','entity',array('class'=>'App\Entity\Student'))
-            ->add('Clase_id')
-            ->add('Course_id')
-            ->add('Grade')
+            ->add('class_id')
+            ->add('course_id')
+            ->add('grade')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -45,9 +45,9 @@ final class StudentsGradeAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('student_id',TextType::class)
-            ->add('Clase_id')
-            ->add('Course_id')
-            ->add('Grade')
+            ->add('class_id')
+            ->add('course_id')
+            ->add('grade')
             ;
     }
 

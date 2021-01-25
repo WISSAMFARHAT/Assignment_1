@@ -14,9 +14,9 @@ class StudentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('First_Name')
-            ->add('Last_Name')
-            ->add('Date_of_Birth',DateType::Class,['years'=>range(1960,2020)])
+            ->add('first_name')
+            ->add('last_name')
+            ->add('date_of_birth',DateType::Class,['years'=>range(1960,2020)])
             ->add('image',FileType::class)
         ;
     }

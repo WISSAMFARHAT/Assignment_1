@@ -18,8 +18,8 @@ final class StudentAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('id')
-            ->add('First_Name')
-            ->add('Last_Name')
+            ->add('first_name')
+            ->add('last_name')
             ;
     }
 
@@ -28,9 +28,9 @@ final class StudentAdmin extends AbstractAdmin
         
         $listMapper
             ->add('id')
-            ->add('First_Name')
-            ->add('Last_Name')
-            ->add('Date_of_Birth')
+            ->add('first_name')
+            ->add('last_name')
+            ->add('date_of_birth')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -43,9 +43,9 @@ final class StudentAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('First_Name')
-            ->add('Last_Name')
-            ->add('Date_of_Birth')
+            ->add('first_name')
+            ->add('last_name')
+            ->add('date_of_birth')
             ;
     }
 
@@ -53,9 +53,9 @@ final class StudentAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('id')
-            ->add('First_Name')
-            ->add('Last_Name')
-            ->add('Date_of_Birth')
+            ->add('first_name')
+            ->add('fast_name')
+            ->add('date_of_birth')
             ->add('image')
             ;
     }

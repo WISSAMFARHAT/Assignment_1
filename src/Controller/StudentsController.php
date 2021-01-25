@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Clase;
-use App\Entity\Users;
+use App\Entity\Classe;
+use App\Entity\User;
 use App\Entity\Course;
 use App\Entity\Student;
-use App\Form\ClaseType;
+use App\Form\ClassType;
 use App\Form\CourseType;
 use App\Form\StudentType;
 use App\Entity\StudentsGrade;
@@ -18,11 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\Mapping\Entity;
 
 class StudentsController extends AbstractController
 {
-
-    
     /**
      * @Route("/", name="Login")
      */
@@ -36,10 +35,10 @@ class StudentsController extends AbstractController
                 $pwd=$request->get('pwd');
                 $remember=$request->get('remember_me');
                 $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select U.id from App\Entity\Users U
+                $query=$en->createQuery("select U.id from App\Entity\User U
                 where U.id='".$username."'and U.pwd='".$pwd."'");
                 $result=$query->getResult();
-                if(count($result) >0){                    
+                if(count($result) >0){
                     $session->set("User",$username);
                     return $this->render('students/index.html.twig');
                 }else{
@@ -82,38 +81,38 @@ class StudentsController extends AbstractController
         ]);
     }
     /**
-     * @Route("/Home/{st}",name="Student")
+     * @Route("/Home/{page}",name="Page")
      */
-    public function Student(String $st,PaginatorInterface $paginator,Request $request)
+    public function Student(String $page,PaginatorInterface $paginator,Request $request)
     {
-        if($st=='students'){
-        $posts = $this->getDoctrine()->getRepository(Student::class)->findAll();
-        foreach($posts as $key=>$value ){
+        if($page=='students'){
+        $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
+        foreach($select as $key=>$value ){
             $value->setImage(base64_encode(stream_get_contents($value->getImage())));
         }
-        return $this->render('students/student.html.twig',array('name' => $st,'stt' =>$posts));
-        }elseif($st=='Classes'){
-            $posts = $this->getDoctrine()->getRepository(Clase::class)->findAll();
+        return $this->render('students/student.html.twig',array('name' => $page,'select' =>$select));
+        }elseif($page=='Classes'){
+            $select = $this->getDoctrine()->getRepository(Classe::class)->findAll();
             $pagination = $paginator->paginate(
-                $posts,
+                $select,
                 $request->query->getInt('page', 1),
                 2,
             );
             $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
             $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
-        return $this->render('students/student.html.twig',array('name' => $st,'Cl' =>$pagination));
-        }elseif($st=='Courses'){
-            $posts = $this->getDoctrine()->getRepository(Course::class)->findAll();
+        return $this->render('students/student.html.twig',array('name' => $page,'select' =>$pagination));
+        }elseif($page=='Courses'){
+            $select = $this->getDoctrine()->getRepository(Course::class)->findAll();
             $pagination = $paginator->paginate(
-                $posts,
+                $select,
                 $request->query->getInt('page', 1),
                 2,
             );
             $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
             $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
-        return $this->render('students/student.html.twig',array('name' => $st,'Course' =>$pagination));
+        return $this->render('students/student.html.twig',array('name' => $page,'select' =>$pagination));
         }
-        return $this->render('students/student.html.twig',array('name' => $st));
+        return $this->render('students/student.html.twig',array('name' => $page));
     }
 
     /**
@@ -140,18 +139,18 @@ class StudentsController extends AbstractController
      */
     public function Update(int $id,Request $request):Response
     {
-        $p=$this->getDoctrine()->getRepository(Student::class)->find($id);
-        $p->setImage(base64_encode(stream_get_contents($p->getImage())));
-        $new=new Student();
+        $student=$this->getDoctrine()->getRepository(Student::class)->find($id);
+        $student->setImage(base64_encode(stream_get_contents($student->getImage())));
+        $new_student=new Student();
         if ($request->query->get('First'))  {
             $entityManager=$this->getDoctrine()->getManager()->getConnection();
             $query="update  student set first_name ='".$request->query->get('First')."',last_name=
             '".$request->query->get('Last')."',date_of_birth='".$request->query->get("Date")."' where id=".$id;
-            $this->addFlash('success',"we saved a edit  student with id  ".$p->getId());
+            $this->addFlash('success',"we saved a edit  student with id  ".$student->getId());
             $statement = $entityManager->prepare($query);
             $statement->execute();
         }
-    return $this->render('students/st_insert_update.html.twig',array("name"=>"Update","Page"=>'students','student'=>$p));
+    return $this->render('students/st_insert_update.html.twig',array("name"=>"Update","Page"=>'students','student'=>$student));
     }
 
     /**
@@ -160,17 +159,17 @@ class StudentsController extends AbstractController
     public function Delete(int $id,Request $request):Response
     {
         $entityManager=$this->getDoctrine()->getManager();
-        $p=$this->getDoctrine()->getRepository(Student::class)->find($id);
+        $student=$this->getDoctrine()->getRepository(Student::class)->find($id);
         if(is_null($p)){
             throw $this->createNotFoundException("No student found for this id ");
         }
-        $entityManager->remove($p);
+        $entityManager->remove($student);
         $entityManager->flush();
-        $posts = $this->getDoctrine()->getRepository(Student::class)->findAll();
-        foreach($posts as $key=>$value ){
+        $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
+        foreach($select as $key=>$value ){
             $value->setImage(base64_encode(stream_get_contents($value->getImage())));
         }
-        return $this->render('students/student.html.twig',array('name' => 'students','stt' =>$posts));
+        return $this->render('students/student.html.twig',array('name' => 'students','select' =>$select));
     }
 
     /**
@@ -179,11 +178,11 @@ class StudentsController extends AbstractController
     public function Show(String $id,Request $request)
     {
         $en=$this->getDoctrine()->getManager();
-        $query=$en->createQuery('select s.id,s.First_Name,s.Last_Name,g.Grade,c.Name from
+        $query=$en->createQuery('select s.id,s.first_name,s.last_name,g.grade,c.name from
         App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-        where s.id=g.student_id and c.id=g.Course_id and s.id='.$id);
-        $posts=$query->getResult();
-        return $this->render('students/show_student.html.twig',array("id"=>$id,'result'=>$posts));
+        where s.id=g.student_id and c.id=g.course_id and s.id='.$id);
+        $result=$query->getResult();
+        return $this->render('students/show_student.html.twig',array("id"=>$id,'result'=>$result));
     }
 
     /**
@@ -191,12 +190,12 @@ class StudentsController extends AbstractController
      */
     public function grade(String $name, Request $request){
         $en=$this->getDoctrine()->getManager();
-        $query=$en->createQuery('select s.id,s.First_Name,s.Last_Name,c.Name,g.Grade from
+        $query=$en->createQuery('select s.id,s.first_name,s.last_name,c.name,g.grade from
         App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-        where g.Course_id=c.id and g.student_id=s.id ');
-        $posts=$query->getResult();
-        return $this->render('students/grade.html.twig',array('grade'=>$posts,'type'=>'student'));
-        
+        where g.course_id=c.id and g.student_id=s.id ');
+        $result=$query->getResult();
+        return $this->render('students/grade.html.twig',array('grade'=>$result,'type'=>'student'));
+
     }
 
     /**
@@ -204,9 +203,9 @@ class StudentsController extends AbstractController
      */
     public function new_course(int $id,Request $request)
     {
-        $posts = $this->getDoctrine()->getRepository(Course::class)->findAll();
-        $clase = $this->getDoctrine()->getRepository(Clase::class)->findAll();
-        return $this->render('students/new_student_course.html.twig',array("id"=>$id,"course"=>$posts,"classe"=>$clase));
+        $Courses = $this->getDoctrine()->getRepository(Course::class)->findAll();
+        $Classes = $this->getDoctrine()->getRepository(Classe::class)->findAll();
+        return $this->render('students/new_student_course.html.twig',array("id"=>$id,"course"=>$Courses,"class"=>$Classes));
     }
 
      /**
@@ -215,27 +214,27 @@ class StudentsController extends AbstractController
     public function new_student_course(int $id,Request $request)
     {
         $Grade=new StudentsGrade();
-        $posts = $this->getDoctrine()->getRepository(StudentsGrade::class)->findBy(['Course_id'=>$request->query->get('course_id'),
+        $Student = $this->getDoctrine()->getRepository(StudentsGrade::class)->findBy(['course_id'=>$request->query->get('course_id'),
         'student_id'=>$id
         ]);
-        if($posts){
+        if($Student){
             $this->addFlash("done","student are  used this course ");
-            $posts = $this->getDoctrine()->getRepository(StudentsGrade::class)->findAll();
-        return $this->render('students/new_student_course.html.twig',array("id"=>$id,"course"=>$posts));
+            $select = $this->getDoctrine()->getRepository(StudentsGrade::class)->findAll();
+        return $this->render('students/new_student_course.html.twig',array("id"=>$id,"course"=>$select));
         }else{
         $Grade->setStudentId($id);
-        $Grade->setClaseId($request->query->get('classe'));
+        $Grade->setClassId($request->query->get('classe'));
         $Grade->setCourseId($request->query->get('course_id'));
         $Grade->setGrade(0);
         $entityManager=$this->getDoctrine()->getManager();
         $entityManager->persist($Grade);
         $entityManager->flush();
-        $posts = $this->getDoctrine()->getRepository(Student::class)->findAll();
-        foreach($posts as $key=>$value ){
+        $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
+        foreach($select as $key=>$value ){
             $value->setImage(base64_encode(stream_get_contents($value->getImage())));
         }
     }
-        return $this->render('students/student.html.twig',array('name' => 'students','stt' =>$posts));
+        return $this->render('students/student.html.twig',array('name' => 'students','select' =>$select));
     }
 
 
@@ -245,17 +244,17 @@ class StudentsController extends AbstractController
      */
     public function Update_Classes(int $id,Request $request):Response
     {
-       $p=$this->getDoctrine()->getRepository(Clase::class)->find($id);
-        $form=$this->createForm(ClaseType::class,$p);
+       $Class=$this->getDoctrine()->getRepository(Classe::class)->find($id);
+        $form=$this->createForm(ClassType::class,$Class);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $entityManager=$this->getDoctrine()->getManager();
-            $p=$form->getData();
-            $entityManager->persist($p);
+            $Class=$form->getData();
+            $entityManager->persist($Class);
             $entityManager->flush();
-            $this->addFlash('success',"we saved a edit  student with id  ".$p->getId());
+            $this->addFlash('success',"we saved a edit  student with id  ".$Class->getId());
         }
-    return $this->render('students/cl_insert_update.html.twig',array("name"=>"Update","Page"=>'Classes','image'=>$p,'id'=>$id,'editForm'=>$form->createView()));
+    return $this->render('students/cl_insert_update.html.twig',array("name"=>"Update","Page"=>'Classes','image'=>$Class,'id'=>$id,'editForm'=>$form->createView()));
     }
 
        /**
@@ -263,12 +262,12 @@ class StudentsController extends AbstractController
      */
     public function insert_class(String $name,Request $request)
     {
-        $Cl=new Clase();
-        $form=$this->createForm(ClaseType::class,$Cl);
+        $Class=new Classe();
+        $form=$this->createForm(ClassType::class,$Class);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $entityManager=$this->getDoctrine()->getManager();
-            $entityManager->persist($Cl);
+            $entityManager->persist($Class);
             $entityManager->flush();
         }
         return $this->render('students/cl_insert_update.html.twig',array("name"=>'Insert',"Page"=>'classes',"form"=>$form->createView()));
@@ -277,17 +276,24 @@ class StudentsController extends AbstractController
     /**
      * @Route("/Home/classes/Remove/{id}",name="Remove_classes")
      */
-    public function Remove_Delete(int $id,Request $request):Response
+    public function Remove_Delete(int $id,PaginatorInterface $paginator,Request $request):Response
     {
         $entityManager=$this->getDoctrine()->getManager();
-        $p=$this->getDoctrine()->getRepository(Clase::class)->find($id);
-        if(is_null($p)){
-            throw $this->createNotFoundException("No classe found for this id ");
+        $Class=$this->getDoctrine()->getRepository(Classe::class)->find($id);
+        if(is_null($Class)){
+            throw $this->createNotFoundException("No class found for this id ");
         }
-        $entityManager->remove($p);
+        $entityManager->remove($Class);
         $entityManager->flush();
-        $posts = $this->getDoctrine()->getRepository(Clase::class)->findAll();
-        return $this->render('students/student.html.twig',array('name' => 'Classes','Cl'=>$posts));
+        $select = $this->getDoctrine()->getRepository(Classe::class)->findAll();
+        $pagination = $paginator->paginate(
+            $select,
+            $request->query->getInt('page', 1),
+            2,
+        );
+        $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
+        $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
+        return $this->render('students/student.html.twig',array('name' => 'Classes','select'=>$pagination));
     }
 
     /**
@@ -295,29 +301,29 @@ class StudentsController extends AbstractController
      */
     public function Update_Course(int $id,Request $request):Response
     {
-       $p=$this->getDoctrine()->getRepository(Course::class)->find($id);
-        $form=$this->createForm(CourseType::class,$p);
+       $Course=$this->getDoctrine()->getRepository(Course::class)->find($id);
+        $form=$this->createForm(CourseType::class,$Course);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $entityManager=$this->getDoctrine()->getManager();
-            $p=$form->getData();
-            $entityManager->persist($p);
+            $Course=$form->getData();
+            $entityManager->persist($Course);
             $entityManager->flush();
-            $this->addFlash('success',"we saved a edit  student with id  ".$p->getId());
+            $this->addFlash('success',"we saved a edit  student with id  ".$Course->getId());
         }
-    return $this->render('students/course_insert_update.html.twig',array("name"=>"Update","Page"=>'Course','image'=>$p,'id'=>$id,'editForm'=>$form->createView()));
+    return $this->render('students/course_insert_update.html.twig',array("name"=>"Update","Page"=>'Course','image'=>$Course,'id'=>$id,'editForm'=>$form->createView()));
     }
      /**
      * @Route("/Student/course/{name}",name="insert_course")
      */
     public function insert_Course(String $name,Request $request)
     {
-        $Cl=new Course();
-        $form=$this->createForm(CourseType::class,$Cl);
+        $Course=new Course();
+        $form=$this->createForm(CourseType::class,$Course);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $entityManager=$this->getDoctrine()->getManager();
-            $entityManager->persist($Cl);
+            $entityManager->persist($Course);
             $entityManager->flush();
         }
         return $this->render('students/course_insert_update.html.twig',array("name"=>$name,"Page"=>'Course',"form"=>$form->createView()));
@@ -326,17 +332,24 @@ class StudentsController extends AbstractController
     /**
      * @Route("/Home/course/Remove/{id}",name="Remove_course")
      */
-    public function Remove_Course(int $id,Request $request):Response
+    public function Remove_Course(int $id,PaginatorInterface $paginator,Request $request):Response
     {
         $entityManager=$this->getDoctrine()->getManager();
-        $p=$this->getDoctrine()->getRepository(Course::class)->find($id);
-        if(is_null($p)){
-            throw $this->createNotFoundException("No classe found for this id ");
+        $Course=$this->getDoctrine()->getRepository(Course::class)->find($id);
+        if(is_null($Course)){
+            throw $this->createNotFoundException("No class found for this id ");
         }
-        $entityManager->remove($p);
+        $entityManager->remove($Course);
         $entityManager->flush();
-        $posts = $this->getDoctrine()->getRepository(Course::class)->findAll();
-        return $this->render('students/student.html.twig',array('name' => 'Courses','Course'=>$posts));
+        $select = $this->getDoctrine()->getRepository(Course::class)->findAll();
+        $pagination = $paginator->paginate(
+            $select,
+            $request->query->getInt('page', 1),
+            2,
+        );
+        $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
+        $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
+        return $this->render('students/student.html.twig',array('name' => 'Courses','select'=>$select));
     }
 
 
@@ -348,60 +361,60 @@ class StudentsController extends AbstractController
         $type=$request->query->get('type');
         $filters=$request->query->get('input');
         if($filter=='Classes'){
-            $posts = $this->getDoctrine()->getRepository(Clase::class)->findBy(['Name'=>$filters]);
-            return $this->render('students/Filter.html.twig',array('filter'=>$posts,'type'=>'Classes'));
+            $select = $this->getDoctrine()->getRepository(Classe::class)->findBy(['name'=>$filters]);
+            return $this->render('students/Filter.html.twig',array('filter'=>$select,'type'=>'Classes'));
         }
         if($filter=='Courses'){
-            $posts = $this->getDoctrine()->getRepository(Course::class)->findBy(['Name'=>$filters]);
-            return $this->render('students/Filter.html.twig',array('filter'=>$posts,'type'=>'Courses'));
+            $select = $this->getDoctrine()->getRepository(Course::class)->findBy(['name'=>$filters]);
+            return $this->render('students/Filter.html.twig',array('filter'=>$select,'type'=>'Courses'));
         }
         if($filter=='students'){
             if($type=='First_Name'){
-            $posts = $this->getDoctrine()->getRepository(Student::class)->findBy(['First_Name'=>$filters]);
+            $select = $this->getDoctrine()->getRepository(Student::class)->findBy(['first_name'=>$filters]);
             $en=$this->getDoctrine()->getManager();
-            $query=$en->createQuery('select s.id,s.First_Name,s.Last_Name,s.Date_of_Birth,c.Name from
+            $query=$en->createQuery('select s.id,s.first_name,s.last_name,s.date_of_birth,c.name from
             App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-            where g.Course_id=c.id');
-            $posts=$query->getResult();
+            where g.course_id=c.id');
+            $result=$query->getResult();
             }elseif($type=='Last_Name'){
-                $posts = $this->getDoctrine()->getRepository(Student::class)->findBy(['Last_Name'=>$filters]);
+                $select = $this->getDoctrine()->getRepository(Student::class)->findBy(['last_name'=>$filters]);
                 $en=$this->getDoctrine()->getManager();
-            $query=$en->createQuery('select s.id,s.First_Name,s.Last_Name,s.Date_of_Birth,c.Name from
+            $query=$en->createQuery('select s.id,s.first_name,s.last_name,s.date_of_birth,c.name from
             App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-            where g.Course_id=c.id');
-            $posts=$query->getResult();
+            where g.course_id=c.id');
+            $result=$query->getResult();
             }elseif($type='course'){
-                $posts = $this->getDoctrine()->getRepository(Student::class)->findAll();
+                $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
                 $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select s.id,s.First_Name,s.Last_Name,s.Date_of_Birth,c.Name from
+                $query=$en->createQuery("select s.id,s.first_name,s.last_name,s.date_of_birth,c.name from
                 App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-                where g.Course_id=c.id and s.id=g.student_id and c.Name='$filters'");
-            $posts=$query->getResult();
+                where g.course_id=c.id and s.id=g.student_id and c.name='$filters'");
+            $result=$query->getResult();
             }
-            return $this->render('students/Filter.html.twig',array('filter'=>$posts,'type'=>'students'));
+            return $this->render('students/Filter.html.twig',array('filter'=>$result,'type'=>'students'));
         }
         if($filter=='show'){
             if($type=='First_Name'){
                 $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select s.id,s.First_Name,s.Last_Name,c.Name,g.Grade from
+                $query=$en->createQuery("select s.id,s.first_name,s.last_name,c.name,g.grade from
                 App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-                where g.Course_id=c.id and g.student_id=s.id and s.First_Name='$filters'");
-            $posts=$query->getResult();
-            return $this->render('students/Filter.html.twig',array('filter'=>$posts,'type'=>'grade'));
+                where g.course_id=c.id and g.student_id=s.id and s.first_name='$filters'");
+                $result=$query->getResult();
+                return $this->render('students/Filter.html.twig',array('filter'=>$result,'type'=>'grade'));
             }elseif($type=='Course'){
                 $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select s.id,s.First_Name,s.Last_Name,c.Name,g.Grade from
+                $query=$en->createQuery("select s.id,s.first_name,s.last_name,c.name,g.grade from
                 App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-                where g.Course_id=c.id and g.student_id=s.id and c.Name='$filters'");
-            $posts=$query->getResult();
-            return $this->render('students/Filter.html.twig',array('filter'=>$posts,'type'=>'grade'));
+                where g.course_id=c.id and g.student_id=s.id and c.name='$filters'");
+                $result=$query->getResult();
+                return $this->render('students/Filter.html.twig',array('filter'=>$result,'type'=>'grade'));
             }elseif($type=='grade'){
                 $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select s.id,s.First_Name,s.Last_Name,c.Name,g.Grade from
+                $query=$en->createQuery("select s.id,s.first_name,s.last_name,c.name,g.grade from
                 App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-                where g.Course_id=c.id and g.student_id=s.id and g.Grade=".$filters);
-            $posts=$query->getResult();
-            return $this->render('students/Filter.html.twig',array('filter'=>$posts,'type'=>'grade'));
+                where g.course_id=c.id and g.student_id=s.id and g.grade=".$filters);
+                $result=$query->getResult();
+                return $this->render('students/Filter.html.twig',array('filter'=>$result,'type'=>'grade'));
             }
         }
         return $this->render('students/Filter.html.twig',array('type'=>$type,'filter'=>$filters));

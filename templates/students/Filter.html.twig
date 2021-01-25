@@ -9,7 +9,7 @@
         {%if type=='grade'%}
         <a href="{{ path('grade',{'name':'grade'}) }}" class="btn-warning btn"> back to page</a>
         {%else%}
-           <a href="{{ path('Student',{'st':type}) }}" class="btn-warning btn"> back to page</a>
+           <a href="{{ path('Page',{'page':type}) }}" class="btn-warning btn"> back to page</a>
         {%endif%}
         </div>
     </div>
@@ -23,7 +23,7 @@
       <th scope="col">Name</th>
       <th scope="col">Section</th>
     </tr>
-{% elseif type=='Course'%}  
+{% elseif type=='Courses'%}  
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
@@ -56,7 +56,7 @@
       <td>{{filters.getSection()}}</td>
     </tr>
     {%endfor%}
-{% elseif type=='Course'%}
+{% elseif type=='Courses'%}
 {% for filters in filter%}
     <tr>
       <th scope="row">{{filters.getid()}}</th>
@@ -68,20 +68,20 @@
 {% for filters in filter%}
     <tr>
       <th scope="row">{{filters.id}}</th>
-      <td>{{filters.First_Name}}</td>
-      <td>{{filters.Last_Name}}</td>
-      <td>{{filters.Date_of_Birth|date('Y-m-d')}}</td>
-      <td>{{filters.Name}}</td>
+      <td>{{filters.first_name}}</td>
+      <td>{{filters.last_name}}</td>
+      <td>{{filters.date_of_birth|date('Y-m-d')}}</td>
+      <td>{{filters.name}}</td>
     </tr>
 {%endfor%}
 {%elseif type=='grade'%}
 {% for filters in filter%}
     <tr>
       <th scope="row">{{filters.id}}</th>
-      <td>{{filters.First_Name}}</td>
-      <td>{{filters.Last_Name}}</td>
-      <td>{{filters.Name}}</td>
-      <td>{{filters.Grade}}</td>
+      <td>{{filters.first_name}}</td>
+      <td>{{filters.last_name}}</td>
+      <td>{{filters.name}}</td>
+      <td>{{filters.grade}}</td>
     </tr>
 {%endfor%}
 {%endif%}

@@ -13,9 +13,9 @@ class StudentGradeType extends AbstractType
     {
         $builder
             ->add('student_id')
-            ->add('Clase_id')
-            ->add('Course_id')
-            ->add('Grade')
+            ->add('class_id')
+            ->add('course_id')
+            ->add('grade')
         ;
     }
 

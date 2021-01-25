@@ -10,13 +10,13 @@ use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use App\Entity\Clase;
+use App\Entity\Classe;
 
 /**
  * @ORM\Entity(repositoryClass=BaseEntityRepository::class)
  * @ORM\InheritanceType("JOINED")
  * @DiscriminatorColumn(name="classe", type="string")
- * @DiscriminatorMap({"Course" = "Course","Clase"="Clase","Student"="Student"})
+ * @DiscriminatorMap({"Course" = "Course","Classe"="Classe","Student"="Student"})
  */
  abstract class BaseEntity
 {
@@ -30,12 +30,12 @@ use App\Entity\Clase;
     /**
      * @ORM\Column(type="datetime",nullable=true)
      */
-    protected $Created;
+    protected $created;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
      */
-    protected $Modified;
+    protected $modified;
 
     
 
@@ -46,24 +46,24 @@ use App\Entity\Clase;
 
     public function getModified(): ?\DateTimeInterface
     {
-        return $this->Modified;
+        return $this->modified;
     }
 
-    public function setModified(\DateTimeInterface $Modified): self
+    public function setModified(\DateTimeInterface $modified): self
     {
-        $this->Modified = $Modified;
+        $this->modified = $modified;
 
         return $this;
     }
 
     public function getCreated(): ?\DateTimeInterface
     {
-        return $this->Created;
+        return $this->created;
     }
 
-    public function setCreated(\DateTimeInterface $Created): self
+    public function setCreated(\DateTimeInterface $created): self
     {
-        $this->Created = $Created;
+        $this->created = $created;
 
         return $this;
     }

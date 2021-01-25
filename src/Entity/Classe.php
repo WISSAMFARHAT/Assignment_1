@@ -3,50 +3,51 @@
 namespace App\Entity;
 
 use DateTime;
+use App\Entity\Classe;
 use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ClaseRepository;
+use App\Repository\ClassRepository;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 /**
- * @ORM\Entity(repositoryClass=ClaseRepository::class)
+ * @ORM\Entity(repositoryClass=ClassRepository::class)
  */
-class Clase extends BaseEntity
+class Classe extends BaseEntity
 {
     
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Name;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Section;
+    private $section;
 
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): self
+    public function setName(string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getSection(): ?string
     {
-        return $this->Section;
+        return $this->section;
     }
 
-    public function setSection(string $Section): self
+    public function setSection(string $section): self
     {
-        $this->Section = $Section;
+        $this->section = $section;
 
         return $this;
     }

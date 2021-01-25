@@ -44,15 +44,15 @@ services:
               }
         public: true
 
-    admin.clase:
-        class: App\Admin\ClaseAdmin
-        arguments: [~, App\Entity\Clase, ~]
+    admin.classe:
+        class: App\Admin\ClasseAdmin
+        arguments: [~, App\Entity\Classe, ~]
         tags:
             - {
                   name: sonata.admin,
                   manager_type: orm,
                   group: admin,
-                  label: Clase,
+                  label: Classe,
               }
         public: true
 

@@ -16,16 +16,16 @@ final class CourseAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('Name')
-            ->add('Description')
+            ->add('name')
+            ->add('description')
             ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('Name')
-            ->add('Description')
+            ->add('name')
+            ->add('description')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -38,16 +38,16 @@ final class CourseAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('Name')
-            ->add('Description')
+            ->add('name')
+            ->add('description')
             ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
-            ->add('Name')
-            ->add('Description')
+            ->add('name')
+            ->add('description')
             ;
     }
 }

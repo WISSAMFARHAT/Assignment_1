@@ -25,17 +25,17 @@ class StudentsGrade
     /**
      * @ORM\Column(type="integer")
      */
-    private $Clase_id;
+    private $class_id;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $Course_id;
+    private $course_id;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $Grade;
+    private $grade;
 
     public function getId(): ?int
     {
@@ -54,38 +54,38 @@ class StudentsGrade
         return $this;
     }
 
-    public function getClaseId(): ?int
+    public function getClassId(): ?int
     {
-        return $this->Clase_id;
+        return $this->class_id;
     }
 
-    public function setClaseId(int $Clase_id): self
+    public function setClassId(int $class_id): self
     {
-        $this->Clase_id = $Clase_id;
+        $this->class_id = $class_id;
 
         return $this;
     }
 
     public function getCourseId(): ?int
     {
-        return $this->Course_id;
+        return $this->course_id;
     }
 
-    public function setCourseId(int $Course_id): self
+    public function setCourseId(int $course_id): self
     {
-        $this->Course_id = $Course_id;
+        $this->course_id = $course_id;
 
         return $this;
     }
 
     public function getGrade(): ?int
     {
-        return $this->Grade;
+        return $this->grade;
     }
 
-    public function setGrade(?int $Grade): self
+    public function setGrade(?int $grade): self
     {
-        $this->Grade = $Grade;
+        $this->grade = $grade;
 
         return $this;
     }

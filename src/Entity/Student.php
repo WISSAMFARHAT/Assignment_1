@@ -16,17 +16,17 @@ class Student extends BaseEntity
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $First_Name;
+    private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Last_Name;
+    private $last_name;
 
     /**
      * @ORM\Column(type="date")
      */
-    private $Date_of_Birth;
+    private $date_of_birth;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
@@ -41,36 +41,36 @@ class Student extends BaseEntity
 
     public function getFirstName(): ?string
     {
-        return $this->First_Name;
+        return $this->first_name;
     }
 
-    public function setFirstName(string $First_Name): self
+    public function setFirstName(string $first_name): self
     {
-        $this->First_Name = $First_Name;
+        $this->first_name = $first_name;
 
         return $this;
     }
 
     public function getLastName(): ?string
     {
-        return $this->Last_Name;
+        return $this->last_name;
     }
 
-    public function setLastName(string $Last_Name): self
+    public function setLastName(string $last_name): self
     {
-        $this->Last_Name = $Last_Name;
+        $this->last_name = $last_name;
 
         return $this;
     }
 
     public function getDateOfBirth(): ?\DateTimeInterface
     {
-        return $this->Date_of_Birth;
+        return $this->date_of_birth;
     }
 
-    public function setDateOfBirth(\DateTimeInterface $Date_of_Birth): self
+    public function setDateOfBirth(\DateTimeInterface $date_of_birth): self
     {
-        $this->Date_of_Birth = $Date_of_Birth;
+        $this->date_of_birth = $date_of_birth;
 
         return $this;
     }
@@ -86,6 +86,5 @@ class Student extends BaseEntity
 
         return $this;
     }
-   
-    
+
 }

@@ -4,7 +4,7 @@
 <div class="container mt-3 mb-3">
     <div class="row ml-5 mb-3">
         <div class="col-2 mt-4">
-           <a href="{{ path('Student',{'st':'students'}) }}" class="btn-warning btn"> back to page</a>
+           <a href="{{ path('Page',{'page':'students'}) }}" class="btn-warning btn"> back to page</a>
         </div>
     </div>
 </div>
@@ -22,10 +22,10 @@
   {% for show in result%}
     <tr>
       <th scope="row">{{show.id}}</th>
-      <td>{{show.First_Name}}</td>
-      <td>{{show.Last_Name}}</td>
-      <td>{{show.Name}}</td>
-      <td>{{show.Grade}}</td>
+      <td>{{show.first_name}}</td>
+      <td>{{show.last_name}}</td>
+      <td>{{show.name}}</td>
+      <td>{{show.grade}}</td>
     </tr>
     {%endfor%}
   </tbody>

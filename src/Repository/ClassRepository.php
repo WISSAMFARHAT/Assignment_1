@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Clase;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Classe;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @method Clase|null find($id, $lockMode = null, $lockVersion = null)
- * @method Clase|null findOneBy(array $criteria, array $orderBy = null)
- * @method Clase[]    findAll()
- * @method Clase[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Classe|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Classe|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Classe[]    findAll()
+ * @method Classe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ClaseRepository extends ServiceEntityRepository
+class ClassRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Clase::class);
+        parent::__construct($registry, Classe::class);
     }
 
     // /**
-    //  * @return Clase[] Returns an array of Clase objects
+    //  * @return Classe[] Returns an array of Classe objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ClaseRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Clase
+    public function findOneBySomeField($value): ?Classe
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')

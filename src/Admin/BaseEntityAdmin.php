@@ -20,8 +20,8 @@ final class BaseEntityAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('id')
-            ->add('Created')
-            ->add('Modified');
+            ->add('created')
+            ->add('modified');
     }
 
 }
