@@ -5,6 +5,7 @@ namespace App\Subscript;
 use DateTime;
 use App\Entity\User;
 use App\Entity\Course;
+use App\Entity\Student;
 use Doctrine\ORM\Events;
 use App\Entity\PreUpdate;
 use App\Entity\BaseEntity;
@@ -31,7 +32,7 @@ public  function getSubscribedEvents()
 public function preUpdate(LifecycleEventArgs $args){
 
     $entity = $args->getObject();
-    if ($entity instanceof User) {
+    if ($entity instanceof Student) {
         return;
     }
     if ($entity instanceof StudentsGrade) {
@@ -43,7 +44,7 @@ public function preUpdate(LifecycleEventArgs $args){
 public function prePersist(LifecycleEventArgs $args)
 {
     $entity = $args->getObject();
-    if ($entity instanceof User) {
+    if ($entity instanceof Student) {
         return;
     }
     if ($entity instanceof StudentsGrade) {

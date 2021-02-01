@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Classe;
-use App\Entity\User;
 use App\Entity\Course;
 use App\Entity\Student;
 use App\Form\ClassType;
@@ -11,84 +10,76 @@ use App\Form\CourseType;
 use App\Form\StudentType;
 use App\Entity\StudentsGrade;
 use App\Form\StudentGradeType;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\Forms;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\ORM\Mapping\Entity;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 class StudentsController extends AbstractController
 {
-    /**
-     * @Route("/", name="Login")
-     */
-    public function Login(Request $request): Response
-    {
-        $session = $request->getSession();
-        if(!$session->has('User')){
-        if ($request->get('User_id'))  {
-            if($request->get('pwd')){
-                $username=$request->get('User_id');
-                $pwd=$request->get('pwd');
-                $remember=$request->get('remember_me');
-                $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select U.id from App\Entity\User U
-                where U.id='".$username."'and U.pwd='".$pwd."'");
-                $result=$query->getResult();
-                if(count($result) >0){
-                    $session->set("User",$username);
-                    return $this->render('students/index.html.twig');
-                }else{
-                    $this->addFlash(
-                        'notice',
-                        'incorrect password or email '
-                    );
-                }
-            }else{
-                $this->addFlash(
-                    'notice',
-                    'put a  password '
-                );
-            }
-        }
-    }else{
-        return $this->render('students/index.html.twig');
+
+    private $encoder;
+    public function __construct(UserPasswordEncoderInterface $encoder){
+        $this->encoder=$encoder;
     }
-        return $this->render('Login/Login.html.twig');
-     }
+    /**
+     * @Route("/login", name="login")
+     */
+    public function Login(Request $request,AuthenticationUtils $Utils): Response
+    {
+        
+        $error=$Utils->getLastAuthenticationError();
+        $LastUsername=$Utils->getLastUsername();
+        return $this->render('Login/Login.html.twig',[
+            'error'=>$error,'last_username'=>$LastUsername
+        ]);
+        }
+    
 
     /**
-     * @Route("/logout",name="Logout")
+     * @Route("/logout",name="logout")
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')")
      */
     public function Logout(Request $request)
 {
-    $session = $request->getSession();
-    $session->remove('User');
-    $forward = $this->forward('App\Controller\StudentsController::Login');
-     return $forward;
 }
 
-  /**
-     * @Route("/index", name="home")
+    /**
+     * @Route("/", name="home")
+     * @Security("is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->render('students/index.html.twig', [
-            'controller_name' => 'StudentsController',
-        ]);
+
+        $user = $this->getUser();
+        dump($user);
+            return $this->render('students/index.html.twig');
     }
     /**
-     * @Route("/Home/{page}",name="Page")
-     */
+     * @Route("/student/{page}",name="Page")
+     
+      */
     public function Student(String $page,PaginatorInterface $paginator,Request $request)
     {
+   
         if($page=='students'){
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
         foreach($select as $key=>$value ){
+            if($value->getImage() !=null){
             $value->setImage(base64_encode(stream_get_contents($value->getImage())));
+            }
         }
         return $this->render('students/student.html.twig',array('name' => $page,'select' =>$select));
         }elseif($page=='Classes'){
@@ -102,6 +93,7 @@ class StudentsController extends AbstractController
             $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
         return $this->render('students/student.html.twig',array('name' => $page,'select' =>$pagination));
         }elseif($page=='Courses'){
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $select = $this->getDoctrine()->getRepository(Course::class)->findAll();
             $pagination = $paginator->paginate(
                 $select,
@@ -116,7 +108,7 @@ class StudentsController extends AbstractController
     }
 
     /**
-     * @Route("/Home/student/{name}",name="new")
+     * @Route("/student/student/{name}",name="new")
      */
     public function New(String $name,Request $request)
     {
@@ -127,6 +119,10 @@ class StudentsController extends AbstractController
             $entityManager=$this->getDoctrine()->getManager();
             $files=file_get_contents($form['image']->getData());
             $student->setImage($files);
+            $student->setPwd(
+                $this->encoder->encodePassword($student,$form['pwd']->getData())
+            );
+            $student->setRoles(["ROLE_USER"]);
             $entityManager->persist($student);
             $entityManager->flush();
         }
@@ -135,7 +131,7 @@ class StudentsController extends AbstractController
     }
 
       /**
-     * @Route("/Home/student/edit/{id}",name="update")
+     * @Route("/student/student/edit/{id}",name="update")
      */
     public function Update(int $id,Request $request):Response
     {
@@ -154,7 +150,7 @@ class StudentsController extends AbstractController
     }
 
     /**
-     * @Route("/Home/student/Remove/{id}",name="Remove")
+     * @Route("/student/student/Remove/{id}",name="Remove")
      */
     public function Delete(int $id,Request $request):Response
     {
@@ -173,7 +169,7 @@ class StudentsController extends AbstractController
     }
 
     /**
-     * @Route("/Home/student/show/{id}",name="Show")
+     * @Route("/student/student/show/{id}",name="Show")
      */
     public function Show(String $id,Request $request)
     {
@@ -186,7 +182,7 @@ class StudentsController extends AbstractController
     }
 
     /**
-     * @Route("/home/student/{name}",name="grade")
+     * @Route("/student/student/{name}",name="grade")
      */
     public function grade(String $name, Request $request){
         $en=$this->getDoctrine()->getManager();
@@ -199,7 +195,7 @@ class StudentsController extends AbstractController
     }
 
     /**
-     * @Route("/Home/student/new_course/{id}",name="new_course")
+     * @Route("/student/student/new_course/{id}",name="new_course")
      */
     public function new_course(int $id,Request $request)
     {
@@ -209,7 +205,7 @@ class StudentsController extends AbstractController
     }
 
      /**
-     * @Route("/Home/student/new_student_course/{id}",name="new_student_course")
+     * @Route("/student/student/new_student_course/{id}",name="new_student_course")
      */
     public function new_student_course(int $id,Request $request)
     {
@@ -240,7 +236,7 @@ class StudentsController extends AbstractController
 
 
     /**
-     * @Route("/Home/classes/edit/{id}",name="update_classes")
+     * @Route("/student/classes/edit/{id}",name="update_classes")
      */
     public function Update_Classes(int $id,Request $request):Response
     {
@@ -258,7 +254,7 @@ class StudentsController extends AbstractController
     }
 
        /**
-     * @Route("/Home/classes/{name}",name="insert_classes")
+     * @Route("/student/classes/{name}",name="insert_classes")
      */
     public function insert_class(String $name,Request $request)
     {
@@ -274,7 +270,7 @@ class StudentsController extends AbstractController
 
     }
     /**
-     * @Route("/Home/classes/Remove/{id}",name="Remove_classes")
+     * @Route("/student/classes/Remove/{id}",name="Remove_classes")
      */
     public function Remove_Delete(int $id,PaginatorInterface $paginator,Request $request):Response
     {
@@ -314,7 +310,7 @@ class StudentsController extends AbstractController
     return $this->render('students/course_insert_update.html.twig',array("name"=>"Update","Page"=>'Course','image'=>$Course,'id'=>$id,'editForm'=>$form->createView()));
     }
      /**
-     * @Route("/Student/course/{name}",name="insert_course")
+     * @Route("/student/course/{name}",name="insert_course")
      */
     public function insert_Course(String $name,Request $request)
     {
@@ -330,7 +326,7 @@ class StudentsController extends AbstractController
 
     }
     /**
-     * @Route("/Home/course/Remove/{id}",name="Remove_course")
+     * @Route("/student/course/Remove/{id}",name="Remove_course")
      */
     public function Remove_Course(int $id,PaginatorInterface $paginator,Request $request):Response
     {
@@ -354,7 +350,7 @@ class StudentsController extends AbstractController
 
 
      /**
-     * @Route("/home/{student}/{filter}",name="Filter")
+     * @Route("/student/{student}/{filter}",name="Filter")
      */
     public function Filter(String $student,String $filter, Request $request):Response
     {

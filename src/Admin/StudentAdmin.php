@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use Doctrine\DBAL\Types\BlobType;
+use Doctrine\DBAL\Types\StringType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -28,9 +30,11 @@ final class StudentAdmin extends AbstractAdmin
         
         $listMapper
             ->add('id')
+            ->add('pwd')
             ->add('first_name')
             ->add('last_name')
             ->add('date_of_birth')
+            ->add('roles')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -54,9 +58,8 @@ final class StudentAdmin extends AbstractAdmin
         $showMapper
             ->add('id')
             ->add('first_name')
-            ->add('fast_name')
+            ->add('last_name')
             ->add('date_of_birth')
-            ->add('image')
             ;
     }
 }

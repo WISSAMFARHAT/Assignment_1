@@ -19,16 +19,20 @@
         </button>
         <div class="collapse navbar-collapse justify-content-lg-end" style="margin-right:3%!important"  id="navbar">
             <ul class="navbar-nav ">
+            {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
                    <a class="nav-link  font-weight-bold {% if name is defined %} {% if name == 'students' %} active {%endif%}  {%endif%} " aria-current="page" href="{{ path('Page',{'page':'students'}) }}"><h6>Students</h6></a>
                 </li>
+            {%endif%}
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold {% if name is defined %} {% if name == 'Classes' %} active {%endif%}  {%endif%}" href="{{ path('Page',{'page':'Classes'}) }}"><h6>Classes</h6></a>
                 </li>
+             {% if is_granted('ROLE_ADMIN') %}   
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold {% if name is defined %} {% if name == 'Courses' %} active {%endif%}  {%endif%}" href="{{ path('Page',{'page':'Courses'}) }}"><h6>Courses</h6></a>
                 </li>
-            </ul>
+             {%endif%}   
+            </ul>    
         </div>
       </div>
     </nav>
