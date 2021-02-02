@@ -63,9 +63,21 @@ class StudentsController extends AbstractController
     {
 
         $user = $this->getUser();
-        dump($user);
+        dump($this->json($user));
             return $this->render('students/index.html.twig');
     }
+    /**
+     * @Route("/api/account", name="api_account")
+     */
+    public function accountApi()
+    {
+        $user = $this->getUser();
+       return $this->json($user);
+        
+
+    }
+    
+
     /**
      * @Route("/student/{page}",name="Page")
      

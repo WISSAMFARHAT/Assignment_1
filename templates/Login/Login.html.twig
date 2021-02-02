@@ -27,7 +27,7 @@
                     <input type="checkbox" class="form-check-input" id="_remember_me" name="_remember_me">
                     <label class="form-check-label" for="exampleCheck1">Keep Logged in</label>
                 </div>
-                <input type='hidden' name='_csrf_token' value={{csrf_token('login_form')}}>
+                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 <button type="submit" class="btn btn-primary w-100 mt-4">Submit</button>
                 {%if error%}
                     <div class="flash-notice  mt-3 alert alert-danger">

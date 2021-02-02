@@ -7,6 +7,7 @@ use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\StudentRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=StudentRepository::class)
@@ -18,26 +19,31 @@ class Student implements UserInterface, \Serializable
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
+     * @Groups("main")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("main")
      */
     private $pwd;
 
     /**
      * @ORM\Column(type="string", length=255,unique=true)
+     * @Groups("main")
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("main")
      */
     private $last_name;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups("main")
      */
     private $date_of_birth;
 
@@ -48,6 +54,7 @@ class Student implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="json",nullable=true)
+     * @Groups("main")
      */
     private $roles=[];
 
