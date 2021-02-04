@@ -2,21 +2,23 @@
 
 namespace App\Entity;
 
-use DateTime;
-use App\Entity\Classe;
-use App\Entity\BaseEntity;
+use App\Repository\ClasseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ClassRepository;
-use Doctrine\ORM\Mapping\PrePersist;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 /**
- * @ORM\Entity(repositoryClass=ClassRepository::class)
+ * @ORM\Entity(repositoryClass=ClasseRepository::class)
  */
-class Classe extends BaseEntity
+class Classe
 {
-    
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -27,6 +29,20 @@ class Classe extends BaseEntity
      */
     private $section;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Course::class, mappedBy="classe")
+     */
+    private $courses;
+
+    public function __construct()
+    {
+        $this->courses = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getName(): ?string
     {
@@ -52,5 +68,33 @@ class Classe extends BaseEntity
         return $this;
     }
 
+    /**
+     * @return Collection|Course[]
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
 
+    public function addCourse(Course $course): self
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses[] = $course;
+            $course->setClasse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCourse(Course $course): self
+    {
+        if ($this->courses->removeElement($course)) {
+            // set the owning side to null (unless already changed)
+            if ($course->getClasse() === $this) {
+                $course->setClasse(null);
+            }
+        }
+
+        return $this;
+    }
 }

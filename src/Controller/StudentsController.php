@@ -38,7 +38,7 @@ class StudentsController extends AbstractController
      */
     public function Login(Request $request,AuthenticationUtils $Utils): Response
     {
-        
+        dump($Utils);
         $error=$Utils->getLastAuthenticationError();
         $LastUsername=$Utils->getLastUsername();
         return $this->render('Login/Login.html.twig',[
@@ -63,7 +63,10 @@ class StudentsController extends AbstractController
     {
 
         $user = $this->getUser();
-        dump($this->json($user));
+        dump($this->json($user, 200, [], [
+            'groups' => 'main',
+        ]));
+        
             return $this->render('students/index.html.twig');
     }
     /**
@@ -72,11 +75,11 @@ class StudentsController extends AbstractController
     public function accountApi()
     {
         $user = $this->getUser();
-       return $this->json($user);
-        
+       return $this->json($user, 200, [], [
+        'groups' => 'main',
+    ]);
 
     }
-    
 
     /**
      * @Route("/student/{page}",name="Page")

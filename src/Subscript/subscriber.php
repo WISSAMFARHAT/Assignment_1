@@ -24,10 +24,11 @@ class subscriber extends AbstractController implements EventSubscriber
 public  function getSubscribedEvents()
 {
 
-    return [
+/*    return [
         Events::prePersist,
         Events::preUpdate
     ];
+    */
 }
 public function preUpdate(LifecycleEventArgs $args){
 

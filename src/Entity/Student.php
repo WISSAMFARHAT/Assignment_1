@@ -3,47 +3,45 @@
 namespace App\Entity;
 
 use Serializable;
-use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\StudentRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=StudentRepository::class)
  */
-class Student implements UserInterface, \Serializable
+class Student implements  UserInterface , \Serializable
 {
-    
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     * @Groups("main")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups("main")
+     * @ORM\Column(type="integer")
      */
-    private $pwd;
+    private $grade;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StudentGrade::class, mappedBy="student")
+     */
+    private $studentGrades;
 
     /**
      * @ORM\Column(type="string", length=255,unique=true)
-     * @Groups("main")
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("main")
      */
     private $last_name;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups("main")
      */
     private $date_of_birth;
 
@@ -53,36 +51,72 @@ class Student implements UserInterface, \Serializable
     private $image;
 
     /**
-     * @ORM\Column(type="json",nullable=true)
-     * @Groups("main")
+     * @ORM\Column(type="string", length=255)
      */
-    private $roles=[];
+    private $pwd;
 
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    public function __construct()
+    {
+        $this->studentGrades = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): self
     {
         $this->id=$id;
         return $this;
     }
 
-    public function getPwd(): ?string
+    public function getGrade(): ?int
     {
-        return $this->pwd;
+        return $this->grade;
     }
 
-    public function setPwd(string $pwd): self
+    public function setGrade(int $grade): self
     {
-        $this->pwd = $pwd;
+        $this->grade = $grade;
 
         return $this;
-
     }
 
+    /**
+     * @return Collection|StudentGrade[]
+     */
+    public function getStudentGrades(): Collection
+    {
+        return $this->studentGrades;
+    }
+
+    public function addStudentGrade(StudentGrade $studentGrade): self
+    {
+        if (!$this->studentGrades->contains($studentGrade)) {
+            $this->studentGrades[] = $studentGrade;
+            $studentGrade->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudentGrade(StudentGrade $studentGrade): self
+    {
+        if ($this->studentGrades->removeElement($studentGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($studentGrade->getStudent() === $this) {
+                $studentGrade->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getFirstName(): ?string
     {
@@ -132,32 +166,49 @@ class Student implements UserInterface, \Serializable
         return $this;
     }
 
-    
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
+    public function getPwd(): ?string
     {
-       $roles=$this->roles;
-       $roles[]='ROLE_USER';
-       return array_unique($roles);
+        return $this->pwd;
     }
 
-    public function setRoles(array $roles):self
+    public function setPwd(string $pwd): self
     {
-        $this->roles=$roles;
+        $this->pwd = $pwd;
+
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getRoles(): ?array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getPassword()
+    {
+        return $this->pwd;
+    }
+
+    public function getSalt()
+    {
+    
+    }
+
+    public function getUsername()
     {
         return $this->first_name;
     }
-    public function getPassword(): ?string {
-        return $this->pwd;
+
+    public function eraseCredentials()
+    {
     }
-    public function getSalt(){}
-    public function eraseCredentials(){}
+
     public function serialize()
     {
         return serialize([
@@ -176,6 +227,6 @@ class Student implements UserInterface, \Serializable
             $this->last_name,
             $this->pwd,
             $this->roles
-        ) = unserialize($string, ['allowed_classes' => false]);
+        )= unserialize($string,['allowed_classes'=>false]);
     }
 }

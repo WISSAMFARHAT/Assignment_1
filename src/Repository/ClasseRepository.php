@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Classe;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Classe|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,7 +12,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  * @method Classe[]    findAll()
  * @method Classe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ClassRepository extends ServiceEntityRepository
+class ClasseRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
