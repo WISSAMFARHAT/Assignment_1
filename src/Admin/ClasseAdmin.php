@@ -16,6 +16,7 @@ final class ClasseAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
+            ->add('id')
             ->add('name')
             ->add('section')
             ;
@@ -39,6 +40,7 @@ final class ClasseAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
+            ->add('id')
             ->add('name')
             ->add('section')
             ;
@@ -47,7 +49,7 @@ final class ClasseAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
-    
+            ->add('id')
             ->add('name')
             ->add('section')
             ;

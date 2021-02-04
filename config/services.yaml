@@ -32,42 +32,6 @@ services:
 
     App\Subscript\subscriber:
         tags: { name: "doctrine.event_subscriber", connection: default }
-    admin.student:
-        class: App\Admin\StudentAdmin
-        arguments: [~, App\Entity\Student, ~]
-        tags:
-            - {
-                  name: sonata.admin,
-                  manager_type: orm,
-                  group: admin,
-                  label: Student,
-              }
-        public: true
-
-    admin.classe:
-        class: App\Admin\ClasseAdmin
-        arguments: [~, App\Entity\Classe, ~]
-        tags:
-            - {
-                  name: sonata.admin,
-                  manager_type: orm,
-                  group: admin,
-                  label: Classe,
-              }
-        public: true
-
-    admin.course:
-        class: App\Admin\CourseAdmin
-        arguments: [~, App\Entity\Course, ~]
-        tags:
-            - {
-                  name: sonata.admin,
-                  manager_type: orm,
-                  group: admin,
-                  label: Course,
-              }
-        public: true
-
     # admin.students_grade:
     #    class: App\Admin\StudentsGradeAdmin
     #   arguments: [~, App\Entity\StudentsGrade, ~]
@@ -80,14 +44,30 @@ services:
     #  }
     # public: true
 
-    admin.base_entity:
-        class: App\Admin\BaseEntityAdmin
-        arguments: [~, App\Entity\BaseEntity, ~]
+    admin.student:
+        class: App\Admin\StudentAdmin
+        arguments: [~, App\Entity\Student, ~]
         tags:
-            - {
-                  name: sonata.admin,
-                  manager_type: orm,
-                  group: admin,
-                  label: BaseEntity,
-              }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Student }
+        public: true
+
+    admin.classe:
+        class: App\Admin\ClasseAdmin
+        arguments: [~, App\Entity\Classe, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Classe }
+        public: true
+
+    admin.course:
+        class: App\Admin\CourseAdmin
+        arguments: [~, App\Entity\Course, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Course }
+        public: true
+
+    admin.student_grade:
+        class: App\Admin\StudentGradeAdmin
+        arguments: [~, App\Entity\StudentGrade, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: StudentGrade }
         public: true

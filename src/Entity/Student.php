@@ -60,6 +60,10 @@ class Student implements  UserInterface , \Serializable
      */
     private $roles = [];
 
+    public function __toString() {
+        return ("".$this->id);
+    }
+    
     public function __construct()
     {
         $this->studentGrades = new ArrayCollection();

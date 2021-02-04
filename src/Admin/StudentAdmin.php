@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
-use Doctrine\DBAL\Types\BlobType;
-use Doctrine\DBAL\Types\StringType;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class StudentAdmin extends AbstractAdmin
 {
@@ -27,10 +24,9 @@ final class StudentAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $listMapper): void
     {
-        
         $listMapper
             ->add('id')
-            ->add('pwd')
+            ->add('grade')
             ->add('first_name')
             ->add('last_name')
             ->add('date_of_birth')
@@ -47,9 +43,13 @@ final class StudentAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
+            ->add('id')
             ->add('first_name')
             ->add('last_name')
             ->add('date_of_birth')
+            ->add('image')
+            ->add('pwd')
+            ->add('grade')
             ;
     }
 
@@ -60,6 +60,8 @@ final class StudentAdmin extends AbstractAdmin
             ->add('first_name')
             ->add('last_name')
             ->add('date_of_birth')
+            ->add('roles')
+            ->add('grade')
             ;
     }
 }
