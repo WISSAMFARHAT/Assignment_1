@@ -3,14 +3,20 @@
 namespace App\Entity;
 
 use Serializable;
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @ORM\Entity(repositoryClass=StudentRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Student implements  UserInterface , \Serializable
 {
@@ -60,6 +66,9 @@ class Student implements  UserInterface , \Serializable
      */
     private $roles = [];
 
+
+    
+
     public function __toString() {
         return ("".$this->id);
     }
@@ -67,7 +76,9 @@ class Student implements  UserInterface , \Serializable
     public function __construct()
     {
         $this->studentGrades = new ArrayCollection();
+        
     }
+   
 
     public function getId(): ?int
     {
@@ -233,4 +244,7 @@ class Student implements  UserInterface , \Serializable
             $this->roles
         )= unserialize($string,['allowed_classes'=>false]);
     }
+    
+    
+
 }

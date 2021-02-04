@@ -2,15 +2,21 @@
 
 namespace App\Entity;
 
-use App\Repository\CourseRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\PreUpdate;
+use App\Repository\CourseRepository;
+use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 /**
  * @ORM\Entity(repositoryClass=CourseRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
-class Course
+class Course extends BaseEntity
 {
     /**
      * @ORM\Id
@@ -118,4 +124,24 @@ class Course
 
         return $this;
     }
+    
+    /**
+ * @ORM\PrePersist{}
+ */
+public function prePersist(LifecycleEventArgs $args)
+{
+    $entity = $args->getObject(); 
+    $args->getEntity()->setModified(new \DateTimeImmutable() );
+
+}
+
+/**
+* @ORM\PreUpdate{}
+*/
+public function preUpdate(LifecycleEventArgs $args)
+{
+    $entity = $args->getObject();
+    $args->getEntity()->setCreated((new \DateTimeImmutable()));
+   
+}
 }

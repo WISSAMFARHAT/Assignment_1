@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 final class StudentAdmin extends AbstractAdmin
 {
@@ -47,8 +49,11 @@ final class StudentAdmin extends AbstractAdmin
             ->add('first_name')
             ->add('last_name')
             ->add('date_of_birth')
-            ->add('image')
-            ->add('pwd')
+            ->add('pwd', RepeatedType::class, array(
+                'type' => PasswordType::class,
+                'first_options' => array('label' => 'Password'),
+                'second_options' => array('label' => 'Password confirmation')
+            ))
             ->add('grade')
             ;
     }

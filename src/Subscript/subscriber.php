@@ -52,7 +52,7 @@ public function prePersist(LifecycleEventArgs $args)
         return;
     }
     $args->getEntity()->setCreated((new \DateTimeImmutable()));
-    
+
 
 }
 

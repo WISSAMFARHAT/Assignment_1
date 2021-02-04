@@ -33,4 +33,13 @@ class StudentType extends AbstractType
             'data_class' => Student::class,
         ]);
     }
+
+    public function prePersist($object) { 
+        $plainPassword = $object->getPwd();
+        $container = $this->getConfigurationPool()->getContainer();
+        $encoder = $container->get('security.password_encoder');
+        $encoded = $encoder->encodePassword($object, $plainPassword);
+    
+        $object->setPassword($encoded);
+    }
 }
