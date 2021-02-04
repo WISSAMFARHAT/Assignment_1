@@ -20,7 +20,7 @@
             </div>
      </form>
         <div class="col-12 mt-3">
-           <a href="{{ path('Page',{'page':'students'}) }}" class="btn-warning btn"> back to page</a>
+           <a href="{{ path('Page',{'pages':'students'}) }}" class="btn-warning btn"> back to page</a>
         </div>
     </div>
 </div>
@@ -38,10 +38,10 @@
   <tbody>
   {% for grades in grade%}
     <tr>
-      <th scope="row">{{grades.id}}</th>
-      <td>{{grades.first_name}}</td>
-      <td>{{grades.last_name}}</td>
-      <td>{{grades.name}}</td>
+      <th scope="row">{{grades.student.getId}}</th>
+      <td>{{grades.student.getFirstName()}}</td>
+      <td>{{grades.student.getLastName()}}</td>
+      <td>{{grades.course.getName()}}</td>
       <td>{{grades.grade}}</td>
     </tr>
     {%endfor%}

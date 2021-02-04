@@ -27,7 +27,7 @@
             <a href="{{ path('new',{'name':'Insert'}) }}"  class="btn btn-dark mt-3">Insert another student</a>
         </div>
         <div class="col-3 mt-3 mb-3 ">
-            <a href="{{ path('grade',{'name':'grade'}) }}"  class="btn btn-success">show grade</a>
+            <a href="{{ path('grades') }}"  class="btn btn-success">show grade</a>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
          {% if student.getImage != null %}
           <img class="card-img-top " src="data:image/*;base64,{{student.getImage()}}" alt="Card image cap">
           {%else%}
-          <img class="card-img-top " src="{{asset('/public/img/user.png')}}" alt="Card image cap">
+          <img class="card-img-top " src="{{asset('../../public/img/user.png')}}" alt="Card image cap">
           {%endif%}
            <div class="card-body">
            <h5 class="card-title">{{student.getFirstName()}} {{student.getLastName()}}</h5>

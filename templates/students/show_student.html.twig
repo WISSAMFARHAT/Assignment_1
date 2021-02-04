@@ -4,31 +4,32 @@
 <div class="container mt-3 mb-3">
     <div class="row ml-5 mb-3">
         <div class="col-2 mt-4">
-           <a href="{{ path('Page',{'page':'students'}) }}" class="btn-warning btn"> back to page</a>
+           <a href="{{ path('Page',{'pages':'students'}) }}" class="btn-warning btn"> back to page</a>
         </div>
     </div>
 </div>
 <table class="table mt-5">
 <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">First Name</th>
-      <th scope="col">Last Name</th>
+<tr>
+      <th scope="col">#</th>
+      <th scope="col">First_Name</th>
+      <th scope="col">Last_Name</th>
       <th scope="col">Course</th>
-      <th scope="col">Grade</th>
-    </tr>
+      <th scope="col">grade</th>
+</tr>
   </thead>
   <tbody>
-  {% for show in result%}
+  {% for grades in select%}
     <tr>
-      <th scope="row">{{show.id}}</th>
-      <td>{{show.first_name}}</td>
-      <td>{{show.last_name}}</td>
-      <td>{{show.name}}</td>
-      <td>{{show.grade}}</td>
+      <th scope="row">{{grades.student.getId}}</th>
+      <td>{{grades.student.getFirstName()}}</td>
+      <td>{{grades.student.getLastName()}}</td>
+      <td>{{grades.course.getName()}}</td>
+      <td>{{grades.grade}}</td>
     </tr>
     {%endfor%}
   </tbody>
 </table>
+
 {% endblock %}
 

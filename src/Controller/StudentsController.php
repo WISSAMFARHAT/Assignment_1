@@ -8,6 +8,7 @@ use App\Entity\Student;
 use App\Form\ClassType;
 use App\Form\CourseType;
 use App\Form\StudentType;
+use App\Entity\StudentGrade;
 use App\Entity\StudentsGrade;
 use App\Form\StudentGradeType;
 use Doctrine\ORM\Mapping\Entity;
@@ -57,7 +58,6 @@ class StudentsController extends AbstractController
 
     /**
      * @Route("/", name="home")
-     * @Security("is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")
      */
     public function index(Request $request): Response
     {
@@ -82,22 +82,21 @@ class StudentsController extends AbstractController
     }
 
     /**
-     * @Route("/student/{page}",name="Page")
+     * @Route("/student/{pages}",name="Page")
      
       */
-    public function Student(String $page,PaginatorInterface $paginator,Request $request)
+    public function Student(String $pages,PaginatorInterface $paginator,Request $request)
     {
    
-        if($page=='students'){
-            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if($pages=='students'){
         $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
         foreach($select as $key=>$value ){
             if($value->getImage() !=null){
             $value->setImage(base64_encode(stream_get_contents($value->getImage())));
             }
         }
-        return $this->render('students/student.html.twig',array('name' => $page,'select' =>$select));
-        }elseif($page=='Classes'){
+        return $this->render('students/student.html.twig',array('name' => $pages,'select' =>$select));
+        }elseif($pages=='Classes'){
             $select = $this->getDoctrine()->getRepository(Classe::class)->findAll();
             $pagination = $paginator->paginate(
                 $select,
@@ -106,9 +105,8 @@ class StudentsController extends AbstractController
             );
             $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
             $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
-        return $this->render('students/student.html.twig',array('name' => $page,'select' =>$pagination));
-        }elseif($page=='Courses'){
-            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        return $this->render('students/student.html.twig',array('name' => $pages,'select' =>$pagination));
+        }elseif($pages=='Courses'){
             $select = $this->getDoctrine()->getRepository(Course::class)->findAll();
             $pagination = $paginator->paginate(
                 $select,
@@ -117,9 +115,9 @@ class StudentsController extends AbstractController
             );
             $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
             $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
-        return $this->render('students/student.html.twig',array('name' => $page,'select' =>$pagination));
+        return $this->render('students/student.html.twig',array('name' => $pages,'select' =>$pagination));
         }
-        return $this->render('students/student.html.twig',array('name' => $page));
+        return $this->render('students/student.html.twig',array('name' => $pages));
     }
 
     /**
@@ -151,7 +149,9 @@ class StudentsController extends AbstractController
     public function Update(int $id,Request $request):Response
     {
         $student=$this->getDoctrine()->getRepository(Student::class)->find($id);
+        if($student->getImage()!=null){
         $student->setImage(base64_encode(stream_get_contents($student->getImage())));
+        }
         $new_student=new Student();
         if ($request->query->get('First'))  {
             $entityManager=$this->getDoctrine()->getManager()->getConnection();
@@ -188,23 +188,17 @@ class StudentsController extends AbstractController
      */
     public function Show(String $id,Request $request)
     {
-        $en=$this->getDoctrine()->getManager();
-        $query=$en->createQuery('select s.id,s.first_name,s.last_name,g.grade,c.name from
-        App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-        where s.id=g.student_id and c.id=g.course_id and s.id='.$id);
-        $result=$query->getResult();
-        return $this->render('students/show_student.html.twig',array("id"=>$id,'result'=>$result));
+        $repository = $this->getDoctrine()->getRepository(StudentGrade::class);
+        $select = $repository->findBy(['student'=>$id]);
+    return $this->render('students/show_student.html.twig',array("name"=>"show","Page"=>'students',"select" => $select));
     }
 
     /**
-     * @Route("/student/student/{name}",name="grade")
+     * @Route("/grade",name="grades")
      */
-    public function grade(String $name, Request $request){
-        $en=$this->getDoctrine()->getManager();
-        $query=$en->createQuery('select s.id,s.first_name,s.last_name,c.name,g.grade from
-        App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-        where g.course_id=c.id and g.student_id=s.id ');
-        $result=$query->getResult();
+    public function grade(Request $request){
+        $repository = $this->getDoctrine()->getRepository(StudentGrade::class);
+        $result = $repository->findAll();
         return $this->render('students/grade.html.twig',array('grade'=>$result,'type'=>'student'));
 
     }
@@ -214,9 +208,17 @@ class StudentsController extends AbstractController
      */
     public function new_course(int $id,Request $request)
     {
-        $Courses = $this->getDoctrine()->getRepository(Course::class)->findAll();
-        $Classes = $this->getDoctrine()->getRepository(Classe::class)->findAll();
-        return $this->render('students/new_student_course.html.twig',array("id"=>$id,"course"=>$Courses,"class"=>$Classes));
+        $new_course=new StudentGrade();
+        $entityManager=$this->getDoctrine()->getManager();
+        $form=$this->createForm(StudentGradeType::class,$new_course);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $entityManager->persist($new_course);
+            $entityManager->flush();
+        }
+        return $this->render('students/new_student_course.html.twig',array("form"=>$form->createView()));
+
+
     }
 
      /**
@@ -360,7 +362,7 @@ class StudentsController extends AbstractController
         );
         $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
         $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
-        return $this->render('students/student.html.twig',array('name' => 'Courses','select'=>$select));
+        return $this->render('students/student.html.twig',array('name' => 'Courses','select'=>$pagination));
     }
 
 

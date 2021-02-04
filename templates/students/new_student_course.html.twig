@@ -4,45 +4,14 @@
 <div class="container mt-3 mb-3">
     <div class="row ml-5 mb-3">
         <div class="col-12">
-           <a href="{{ path('Page',{'page':'students'}) }}" class="btn-warning btn"> back to page</a>
+           <a href="{{ path('Page',{'pages':'students'}) }}" class="btn-warning btn"> back to page</a>
         </div>
     </div>
 </div>
-{% for message in app.flashes('done')%}
-<div class="alert alert-success">
-    {{message}}
-</div>
-{%endfor%}
-<table class="table mt-5">
-<thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">Name course</th>
-      <th scope="col">Description </th>
-      <th scope="col">Classes </th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for show in course%}
-  <form action="{{ path('new_student_course',{'id':id}) }}">
-    <tr>
-      <th scope="row" name="course">{{show.getId()}}</th>
-      <td>{{show.getName()}}</td>
-      <td>{{show.getDescription()}}</td>
-      <td>
-        <select name="classe" id="type" class="mb-3">
-        {% for cl in class%}
-                <option value="{{cl.getId()}}">{{cl.getName()}}</option>
-        {%endfor%}
-        </select>
-      </td>
-      <input type="hidden" name="course_id" value="{{show.getId()}}">
-      <td><button type="text" class="btn btn-danger">Add</button></td>
-    </tr>
-    </form>
-    {%endfor%}
-  </tbody>
-</table>
+{%form_theme form 'bootstrap_4_layout.html.twig'%}
+    {{form_start(form)}}
+    {{form_widget(form)}}
+        <button class="btn btn-success mt-3">Insert</button>
+    {{form_end(form)}}
 {% endblock %}
 
