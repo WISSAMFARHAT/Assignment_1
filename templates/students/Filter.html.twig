@@ -7,9 +7,9 @@
     <div class="row ml-5">
         <div class="col-12">
         {%if type=='grade'%}
-        <a href="{{ path('grade',{'name':'grade'}) }}" class="btn-warning btn"> back to page</a>
+        <a href="{{ path('grades') }}" class="btn-warning btn"> back to page</a>
         {%else%}
-           <a href="{{ path('Page',{'pages':type}) }}" class="btn-warning btn"> back to page</a>
+           <a href="{{ path('Pages',{'pages':type}) }}" class="btn-warning btn"> back to page</a>
         {%endif%}
         </div>
     </div>
@@ -40,9 +40,9 @@
 {%elseif type=='grade'%}
 <tr>
       <th scope="col">#</th>
-      <th scope="col">First_Name</th>
-      <th scope="col">Last_Name</th>
-      <th scope="col">Course</th>
+      <th scope="col">first_name</th>
+      <th scope="col">last_name</th>
+      <th scope="col">course</th>
       <th scope="col">grade</th>
 </tr>
 {%endif%}
@@ -51,7 +51,7 @@
 {%if type=='Classes'%}
   {% for filters in filter%}
     <tr>
-      <th scope="row">{{filters.getid()}}</th>
+      <th scope="row">{{filters.getId()}}</th>
       <td>{{filters.getName()}}</td>
       <td>{{filters.getSection()}}</td>
     </tr>
@@ -59,7 +59,7 @@
 {% elseif type=='Courses'%}
 {% for filters in filter%}
     <tr>
-      <th scope="row">{{filters.getid()}}</th>
+      <th scope="row">{{filters.getId()}}</th>
       <td>{{filters.getName()}}</td>
       <td>{{filters.getDescription()}}</td>
     </tr>
@@ -67,21 +67,21 @@
 {% elseif type=='students'%}
 {% for filters in filter%}
     <tr>
-      <th scope="row">{{filters.id}}</th>
-      <td>{{filters.first_name}}</td>
-      <td>{{filters.last_name}}</td>
-      <td>{{filters.date_of_birth|date('Y-m-d')}}</td>
-      <td>{{filters.name}}</td>
+      <th scope="row">{{filters.student.getId()}}</th>
+      <td>{{filters.student.getFirstName()}}</td>
+      <td>{{filters.student.getLastName()}}</td>
+      <td>{{filters.student.getDateOfBirth()|date('Y-m-d')}}</td>
+      <td>{{filters.course.getName()}}</td>
     </tr>
 {%endfor%}
 {%elseif type=='grade'%}
 {% for filters in filter%}
     <tr>
-      <th scope="row">{{filters.id}}</th>
-      <td>{{filters.first_name}}</td>
-      <td>{{filters.last_name}}</td>
-      <td>{{filters.name}}</td>
-      <td>{{filters.grade}}</td>
+      <th scope="row">{{filters.student.getId()}}</th>
+      <td>{{filters.student.getFirstName()}}</td>
+      <td>{{filters.student.getLastName()}}</td>
+      <td>{{filters.student.getDateOfBirth()|date('Y-m-d')}}</td>
+      <td>{{filters.course.getName()}}</td>
     </tr>
 {%endfor%}
 {%endif%}

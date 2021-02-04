@@ -383,51 +383,29 @@ class StudentsController extends AbstractController
         }
         if($filter=='students'){
             if($type=='First_Name'){
-            $select = $this->getDoctrine()->getRepository(Student::class)->findBy(['first_name'=>$filters]);
-            $en=$this->getDoctrine()->getManager();
-            $query=$en->createQuery('select s.id,s.first_name,s.last_name,s.date_of_birth,c.name from
-            App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-            where g.course_id=c.id');
-            $result=$query->getResult();
+            $student= $this->getDoctrine()->getRepository(Student::class)->findBy(['first_name'=>$filters]);
+            $select = $this->getDoctrine()->getRepository(StudentGrade::class)->findBy(['student'=>$student]);
             }elseif($type=='Last_Name'){
-                $select = $this->getDoctrine()->getRepository(Student::class)->findBy(['last_name'=>$filters]);
-                $en=$this->getDoctrine()->getManager();
-            $query=$en->createQuery('select s.id,s.first_name,s.last_name,s.date_of_birth,c.name from
-            App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-            where g.course_id=c.id');
-            $result=$query->getResult();
+                $student= $this->getDoctrine()->getRepository(Student::class)->findBy(['last_name'=>$filters]);
+            $select = $this->getDoctrine()->getRepository(StudentGrade::class)->findBy(['student'=>$student]);
             }elseif($type='course'){
-                $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
-                $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select s.id,s.first_name,s.last_name,s.date_of_birth,c.name from
-                App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-                where g.course_id=c.id and s.id=g.student_id and c.name='$filters'");
-            $result=$query->getResult();
-            }
-            return $this->render('students/Filter.html.twig',array('filter'=>$result,'type'=>'students'));
+            $student= $this->getDoctrine()->getRepository(Course::class)->findBy(['name'=>$filters]);
+            $select = $this->getDoctrine()->getRepository(StudentGrade::class)->findBy(['course'=>$student]);
+                           }
+            return $this->render('students/Filter.html.twig',array('filter'=>$select,'type'=>'students'));
         }
         if($filter=='show'){
             if($type=='First_Name'){
-                $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select s.id,s.first_name,s.last_name,c.name,g.grade from
-                App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-                where g.course_id=c.id and g.student_id=s.id and s.first_name='$filters'");
-                $result=$query->getResult();
-                return $this->render('students/Filter.html.twig',array('filter'=>$result,'type'=>'grade'));
+            $student= $this->getDoctrine()->getRepository(Course::class)->findBy(['name'=>$filters]);
+            $select = $this->getDoctrine()->getRepository(StudentGrade::class)->findBy(['course'=>$student]);
+                return $this->render('students/Filter.html.twig',array('filter'=>$select,'type'=>'grade'));
             }elseif($type=='Course'){
-                $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select s.id,s.first_name,s.last_name,c.name,g.grade from
-                App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-                where g.course_id=c.id and g.student_id=s.id and c.name='$filters'");
-                $result=$query->getResult();
-                return $this->render('students/Filter.html.twig',array('filter'=>$result,'type'=>'grade'));
+                $student= $this->getDoctrine()->getRepository(Course::class)->findBy(['name'=>$filters]);
+                $select = $this->getDoctrine()->getRepository(StudentGrade::class)->findBy(['course'=>$student]);
+                return $this->render('students/Filter.html.twig',array('filter'=>$select,'type'=>'grade'));
             }elseif($type=='grade'){
-                $en=$this->getDoctrine()->getManager();
-                $query=$en->createQuery("select s.id,s.first_name,s.last_name,c.name,g.grade from
-                App\Entity\Student s,App\Entity\StudentsGrade g ,App\Entity\Course c
-                where g.course_id=c.id and g.student_id=s.id and g.grade=".$filters);
-                $result=$query->getResult();
-                return $this->render('students/Filter.html.twig',array('filter'=>$result,'type'=>'grade'));
+            $select = $this->getDoctrine()->getRepository(StudentGrade::class)->findBy(['grade'=>$filters]);
+                return $this->render('students/Filter.html.twig',array('filter'=>$select,'type'=>'grade'));
             }
         }
         return $this->render('students/Filter.html.twig',array('type'=>$type,'filter'=>$filters));
