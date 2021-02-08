@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\PreUpdate;
 use App\Repository\CourseRepository;
 use Doctrine\ORM\Mapping\PrePersist;
+use JMS\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -15,6 +17,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 /**
  * @ORM\Entity(repositoryClass=CourseRepository::class)
  * @ORM\HasLifecycleCallbacks()
+ * ApiResource()
  */
 class Course extends BaseEntity
 {
@@ -27,11 +30,13 @@ class Course extends BaseEntity
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"api"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"api"})
      */
     private $description;
 

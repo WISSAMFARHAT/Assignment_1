@@ -21,6 +21,8 @@ class ClassType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Classe::class,
+            'csrf_protection' => false,
         ]);
     }
+   
 }

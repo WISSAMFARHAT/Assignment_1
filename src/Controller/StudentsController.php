@@ -63,27 +63,21 @@ class StudentsController extends AbstractController
     {
 
         $user = $this->getUser();
-        dump($this->json($user, 200, [], [
-            'groups' => 'main',
-        ]));
+        dump($user->getRoles());
         
             return $this->render('students/index.html.twig');
     }
     /**
-     * @Route("/api/account", name="api_account")
+     * @Route("/list", name="list")
      */
-    public function accountApi()
+    public function list(): Response
     {
-        $user = $this->getUser();
-       return $this->json($user, 200, [], [
-        'groups' => 'main',
-    ]);
-
+      return $this->render('api/index.html.twig');
+       
     }
 
     /**
      * @Route("/student/{pages}",name="Page")
-     
       */
     public function Student(String $pages,PaginatorInterface $paginator,Request $request)
     {
@@ -310,7 +304,7 @@ class StudentsController extends AbstractController
     }
 
     /**
-     * @Route("/student/courses/edit/{id}",name="update_course")
+     * @Route("/student/Courses/edit/{id}",name="update_course")
      */
     public function Update_Course(int $id,Request $request):Response
     {
@@ -327,7 +321,7 @@ class StudentsController extends AbstractController
     return $this->render('students/course_insert_update.html.twig',array("name"=>"Update","Page"=>'Course','image'=>$Course,'id'=>$id,'editForm'=>$form->createView()));
     }
      /**
-     * @Route("/student/course/{name}",name="insert_course")
+     * @Route("/student/Courses/{name}",name="insert_course")
      */
     public function insert_Course(String $name,Request $request)
     {
@@ -343,7 +337,7 @@ class StudentsController extends AbstractController
 
     }
     /**
-     * @Route("/student/course/Remove/{id}",name="Remove_course")
+     * @Route("/student/Courses/Remove/{id}",name="Remove_course")
      */
     public function Remove_Course(int $id,PaginatorInterface $paginator,Request $request):Response
     {

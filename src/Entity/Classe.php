@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClasseRepository;
+use JMS\Serializer\Annotation\Groups;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
@@ -25,11 +26,13 @@ class Classe extends BaseEntity
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"api"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"api"})
      */
     private $section;
 

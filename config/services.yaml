@@ -30,44 +30,52 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Subscript\subscriber:
-        tags: { name: "doctrine.event_subscriber", connection: default }
-    # admin.students_grade:
-    #    class: App\Admin\StudentsGradeAdmin
-    #   arguments: [~, App\Entity\StudentsGrade, ~]
-    #  tags:
-    #     - {
-    #          name: sonata.admin,
-    #         manager_type: orm,
-    #        group: admin,
-    #       label: StudentsGrade,
-    #  }
-    # public: true
-
     admin.student:
         class: App\Admin\StudentAdmin
         arguments: [~, App\Entity\Student, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Student }
+            - {
+                  name: sonata.admin,
+                  manager_type: orm,
+                  group: admin,
+                  label: Student,
+              }
         public: true
 
     admin.classe:
         class: App\Admin\ClasseAdmin
         arguments: [~, App\Entity\Classe, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Classe }
+            - {
+                  name: sonata.admin,
+                  manager_type: orm,
+                  group: admin,
+                  label: Classe,
+              }
         public: true
 
     admin.course:
         class: App\Admin\CourseAdmin
         arguments: [~, App\Entity\Course, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Course }
+            - {
+                  name: sonata.admin,
+                  manager_type: orm,
+                  group: admin,
+                  label: Course,
+              }
         public: true
 
     admin.student_grade:
         class: App\Admin\StudentGradeAdmin
         arguments: [~, App\Entity\StudentGrade, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: StudentGrade }
+            - {
+                  name: sonata.admin,
+                  manager_type: orm,
+                  group: admin,
+                  label: StudentGrade,
+              }
         public: true
+#sensio_framework_extra.view.listener:
+#   alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener

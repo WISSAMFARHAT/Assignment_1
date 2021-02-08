@@ -27,7 +27,7 @@ class BaseEntity
         return $this;
      }
 
-     public function getCreated():\DateTimeInterface
+     public function getCreated():?\DateTimeInterface
      {
          return $this->created;
      }
@@ -39,7 +39,7 @@ class BaseEntity
         return $this;
      }
 
-     public function getModified():\DateTimeInterface
+     public function getModified():?\DateTimeInterface
      {
          return $this->modified;
      }
