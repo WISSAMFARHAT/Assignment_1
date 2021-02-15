@@ -15,29 +15,5 @@ security:
         main:
             anonymous: true
             lazy: true
-
-            form_login:
-                login_path: login
-                check_path: login
-                default_target_path: home
-                always_use_default_target_path: true
-                provider: my_provider
-
-            logout:
-                path: /logout
-                target: /login
-
-            remember_me:
-                secret: "%kernel.secret%"
-                lifetime: 604800 #1 week
-                path: /
-
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
-    access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/student/Courses, roles: [ROLE_ADMIN, ROLE_USER] }
-        - { path: ^/student, roles: ROLE_ADMIN }
-        - { path: ^/api, roles: ROLE_ADMIN }
-        - { path: ^/, roles: [ROLE_ADMIN, ROLE_USER] }

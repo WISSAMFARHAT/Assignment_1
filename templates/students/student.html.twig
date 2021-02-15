@@ -32,12 +32,13 @@
       </div>
     </div>
     {%for student in select%}
+    {% if 'ROLE_USER' in student.getRoles(TRUE)  %}
      <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
          <div class="card" style="width: 18rem;">
          {% if student.getImage != null %}
           <img class="card-img-top " src="data:image/*;base64,{{student.getImage()}}" alt="Card image cap">
           {%else%}
-          <img class="card-img-top " src="{{asset('../../public/img/user.png')}}" alt="Card image cap">
+          <img class="card-img-top " src="{{asset('/public/img/user.png')}}" alt="Card image cap">
           {%endif%}
            <div class="card-body">
            <h5 class="card-title">{{student.getFirstName()}} {{student.getLastName()}}</h5>
@@ -46,9 +47,10 @@
            <a  href="{{path('Remove',{'id':student.getId()})}}" class="btn btn-danger">Delete</a>
            <a href="{{path('update',{'id':student.getId()})}}" class="btn btn-secondary">Edit</a>
            <a href="{{ path('new_course',{'id':student.getId()}) }}"  class="btn btn-warning mt-3">Insert cours for student</a>
-           </div>
+          </div>
          </div>
     </div>
+    {%endif%}
     {%endfor%}
     </div>
 </div>

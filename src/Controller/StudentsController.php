@@ -88,9 +88,11 @@ class StudentsController extends AbstractController
             if($value->getImage() !=null){
             $value->setImage(base64_encode(stream_get_contents($value->getImage())));
             }
+
         }
         return $this->render('students/student.html.twig',array('name' => $pages,'select' =>$select));
         }elseif($pages=='Classes'){
+
             $select = $this->getDoctrine()->getRepository(Classe::class)->findAll();
             $pagination = $paginator->paginate(
                 $select,
@@ -100,6 +102,7 @@ class StudentsController extends AbstractController
             $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
             $pagination->setSortableTemplate('@KnpPaginator/Pagination/sortable_link.html.twig');
         return $this->render('students/student.html.twig',array('name' => $pages,'select' =>$pagination));
+
         }elseif($pages=='Courses'){
             $select = $this->getDoctrine()->getRepository(Course::class)->findAll();
             $pagination = $paginator->paginate(

@@ -7,19 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\PreUpdate;
 use App\Repository\CourseRepository;
 use Doctrine\ORM\Mapping\PrePersist;
-use JMS\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CourseRepository::class)
  * @ORM\HasLifecycleCallbacks()
  * ApiResource()
  */
-class Course extends BaseEntity
+class Course extends BaseEntity 
 {
     /**
      * @ORM\Id

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
   /*
@@ -16,9 +17,14 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
    */
 class BaseEntity
 {
-     /** @Column(type="datetime", nullable=true ) */
+     /** @Column(type="datetime", nullable=true ) 
+      * @Groups({"s"})
+     */
+     
      protected $modified;
-     /** @Column(type="datetime", nullable=true) */
+     /** @Column(type="datetime", nullable=true)
+      * @Groups({"s"})
+      */
      protected $created;
     
      public function setCreated(\DateTimeInterface $date):self

@@ -2,20 +2,22 @@
 
 namespace App\Entity;
 
+use OpenApi\Serializer;
 use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClasseRepository;
-use JMS\Serializer\Annotation\Groups;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ClasseRepository::class)
  * @ORM\HasLifecycleCallbacks()
  */
-class Classe extends BaseEntity
+class Classe extends BaseEntity 
 {
     /**
      * @ORM\Id
@@ -26,13 +28,13 @@ class Classe extends BaseEntity
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"api"})
+     * @Groups("api")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"api"})
+     * @Groups("api")
      */
     private $section;
 
@@ -53,6 +55,9 @@ class Classe extends BaseEntity
         return $this->id;
     }
 
+    /**
+     * @Groups({"api"})
+     */
     public function getName(): ?string
     {
         return $this->name;
@@ -64,7 +69,9 @@ class Classe extends BaseEntity
 
         return $this;
     }
-
+/**
+ * @Groups({"api"})
+ */
     public function getSection(): ?string
     {
         return $this->section;
@@ -107,16 +114,15 @@ class Classe extends BaseEntity
         return $this;
     }
 
-    /**
+/**
  * @ORM\PrePersist{}
  */
 public function prePersist(LifecycleEventArgs $args)
 {
-    $entity = $args->getObject(); 
+    $entity = $args->getObject();
     $args->getEntity()->setModified(new \DateTimeImmutable() );
 
 }
-
 /**
 * @ORM\PreUpdate{}
 */
@@ -124,6 +130,5 @@ public function preUpdate(LifecycleEventArgs $args)
 {
     $entity = $args->getObject();
     $args->getEntity()->setCreated((new \DateTimeImmutable()));
-   
 }
 }
