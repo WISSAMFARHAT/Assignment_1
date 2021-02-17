@@ -7,6 +7,7 @@ use App\Entity\Course;
 use App\Form\ClassType;
 use OpenApi\Annotations\Get;
 use FOS\RestBundle\View\View;
+use Doctrine\ORM\Mapping\Entity;
 use FOS\RestBundle\Context\Context;
 use App\Repository\ClasseRepository;
 use JMS\Serializer\SerializationContext;
@@ -37,18 +38,9 @@ class ApiController extends AbstractController
    */
   public function getClasses(): Response
   {
-
-        $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery(
-        'SELECT c
-        FROM App\Entity\Classe c'
-        );
-        $classes = $query->getResult();
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $normalizer = new PropertyNormalizer($classMetadataFactory);
-        $serializer = new Serializer([$normalizer]);
-        $data = $serializer->normalize($classes, null, ['groups' => ['api']]);
-        return  new JsonResponse($data);
+    $classes = $this->getDoctrine()->getRepository(Classe::class)->findAll();
+    $data =$this->serializer($classes);
+    return  new JsonResponse($data);
       }
 
     /**
@@ -57,17 +49,8 @@ class ApiController extends AbstractController
 public function getClasse(Request $request)
 {
       $classeId=$request->get("ID");
-      $em = $this->getDoctrine()->getManager();
-      $query = $em->createQuery(
-      'SELECT c
-      FROM App\Entity\Classe c
-      WHERE c.id ='.$classeId
-      );
-        $classe = $query->getResult();
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $normalizer = new PropertyNormalizer($classMetadataFactory);
-        $serializer = new Serializer([$normalizer]);
-        $data = $serializer->normalize($classe, null, ['groups' => ['api']]);
+      $classe = $this->getDoctrine()->getRepository(Classe::class)->findBy(['id'=>$classeId]);
+      $data =$this->serializer($classe);
         return  new JsonResponse($data);
       }
 
@@ -77,16 +60,8 @@ public function getClasse(Request $request)
    */
   public function getCourses()
   {
-        $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery(
-        'SELECT c
-        FROM App\Entity\Course c'
-        );
-        $courses = $query->getResult();
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $normalizer = new PropertyNormalizer($classMetadataFactory);
-        $serializer = new Serializer([$normalizer]);
-        $data = $serializer->normalize($courses, null, ['groups' => ['api']]);
+        $courses = $this->getDoctrine()->getRepository(Course::class)->findAll();
+        $data =$this->serializer($courses);
         return  new JsonResponse($data);
       }
 
@@ -96,17 +71,8 @@ public function getClasse(Request $request)
 public function getCourse(Request $request)
 {
     $courseId=$request->get("ID");
-    $em = $this->getDoctrine()->getManager();
-    $query = $em->createQuery(
-    'SELECT c
-    FROM App\Entity\Course c
-    WHERE c.id ='.$courseId
-    );
-    $course = $query->getResult();
-    $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-    $normalizer = new PropertyNormalizer($classMetadataFactory);
-    $serializer = new Serializer([$normalizer]);
-    $data = $serializer->normalize($course, null, ['groups' => ['api']]);
+    $course = $this->getDoctrine()->getRepository(Classe::class)->findBy(['id'=>$courseId]);
+    $data =$this->serializer($course);
     return  new JsonResponse($data);
 
 }
@@ -141,6 +107,17 @@ protected function transformJsonBody(Request $request)
 
    return $request;
   }
+
+  protected function serializer($entity)
+  {
+    $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+    $normalizer = new PropertyNormalizer($classMetadataFactory);
+    $serializer = new Serializer([$normalizer]);
+    $data = $serializer->normalize($entity, null, ['groups' => ['api']]);
+    return $data;
+    
+  }
+
 
 }
 
