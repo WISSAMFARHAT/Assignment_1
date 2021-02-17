@@ -6,7 +6,6 @@ use OpenApi\Serializer;
 use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClasseRepository;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -113,22 +112,4 @@ class Classe extends BaseEntity
 
         return $this;
     }
-
-/**
- * @ORM\PrePersist{}
- */
-public function prePersist(LifecycleEventArgs $args)
-{
-    $entity = $args->getObject();
-    $args->getEntity()->setModified(new \DateTimeImmutable() );
-
-}
-/**
-* @ORM\PreUpdate{}
-*/
-public function preUpdate(LifecycleEventArgs $args)
-{
-    $entity = $args->getObject();
-    $args->getEntity()->setCreated((new \DateTimeImmutable()));
-}
 }

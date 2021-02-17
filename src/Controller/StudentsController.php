@@ -63,7 +63,7 @@ class StudentsController extends AbstractController
     {
 
         $user = $this->getUser();
-        dump($user->getRoles());
+        dump($user);
         
             return $this->render('students/index.html.twig');
     }
