@@ -43,7 +43,7 @@ class ApiController extends AbstractController
     return  new JsonResponse($data);
       }
 
-    /**
+  /**
  * @Route("api/classe", name="classeId")
  */
 public function getClasse(Request $request)
@@ -76,15 +76,26 @@ public function getCourse(Request $request)
     return  new JsonResponse($data);
 
 }
+/**
+ * @Route("api/classes_new",name="json_classes",methods={"POST"})
+ */
+public function json_classes(Request $request)
+{
+ 
+  $data = json_decode($request->getContent(), true);
+  $request->request->replace(is_array($data) ? $data : array());
+  dump($request->getContentType('content-type'));
+  dump($data);
+  return $this->render('api/index.html.twig');
+}
+
 #using postman
 /**
    * @Route("api/new_classes", name="new_classes",methods={"POST"}))
-   *
    */
   public function potClasses(Request $request) 
   {
-
-    $request = $this->transformJsonBody($request);
+    
     $class=new Classe();
     $class->setName($request->get('name'));
     $class->setSection($request->get('section'));
@@ -95,18 +106,6 @@ public function getCourse(Request $request)
     return $json;
       }
 
-protected function transformJsonBody(Request $request)
-  {
-   $data = json_decode($request->getContent(), true);
-
-   if ($data === null) {
-    return $request;
-   }
-
-   $request->request->replace($data);
-
-   return $request;
-  }
 
   protected function serializer($entity)
   {

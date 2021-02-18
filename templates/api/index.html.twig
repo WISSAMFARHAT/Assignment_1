@@ -40,6 +40,20 @@
         </div>
         </div>
         </form>
+        <form action="{{path('new_classes')}}" method="post">
+        <div class="col-12 mt-5  form-group row">
+            <div class="col-2" style="margin-left:5%;">
+                <label class="col-form-label ">POST Classe</label>
+             </div>
+             <div class="col-8">   
+                    <input type="text" class="w-25 form-control" name='name' placeholder='name_classe' required></input><br />
+                    <input  type="text"  class="w-25 form-control" name='section' placeholder='section' required></input> </br />
+                    <input type="submit" class="w-25 btn btn-primary" value="send">
+            </div>
+        </div>
+        </div>
+        </form>
+        
         </div>
     </div>
         {% block javascripts %}

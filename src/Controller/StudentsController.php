@@ -72,6 +72,8 @@ class StudentsController extends AbstractController
      */
     public function list(): Response
     {
+
+       
       return $this->render('api/index.html.twig');
        
     }
