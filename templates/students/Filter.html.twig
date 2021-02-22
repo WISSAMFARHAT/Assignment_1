@@ -9,7 +9,7 @@
         {%if type=='grade'%}
         <a href="{{ path('grades') }}" class="btn-warning btn"> back to page</a>
         {%else%}
-           <a href="{{ path('Pages',{'pages':type}) }}" class="btn-warning btn"> back to page</a>
+           <a href="{{ path('Page',{'user':'admin','pages':type}) }}" class="btn-warning btn"> back to page</a>
         {%endif%}
         </div>
     </div>
