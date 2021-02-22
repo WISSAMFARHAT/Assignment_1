@@ -20,17 +20,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
     {
         $request   = $event->getRequest();
         if (0 === strpos($request->headers->get('Content-Type'), 'application/json'))
-        { 
+        {
             $data = json_decode($request->getContent(), true);
 
             if ($data === null) {
              return $request;
             }
-         
             $request->request->replace($data);
-         
-
        }
+       if(strpos($request->getPathInfo(), '/admin/') === 0){
+        $request->attributes->set('User', 'admin');
+        dump($request->attributes->get('User'));
+        }elseif (strpos($request->getPathInfo(), '/student/') === 0) {
+            $request->attributes->set('User', 'API');
+        }
     }
 
     protected function transformJsonBody(Request $request)

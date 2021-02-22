@@ -68,9 +68,9 @@ class StudentsController extends AbstractController
             return $this->render('students/index.html.twig');
     }
     /**
-     * @Route("/list", name="list")
+     * @Route("/api", name="list")
      */
-    public function list(): Response
+    public function list(Request $request): Response
     {
 
        
@@ -83,7 +83,6 @@ class StudentsController extends AbstractController
       */
     public function Student(String $pages,PaginatorInterface $paginator,Request $request)
     {
-   
         if($pages=='students'){
         $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
         foreach($select as $key=>$value ){
