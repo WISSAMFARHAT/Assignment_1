@@ -4,6 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.route_prefix: "admin"
+    context:
+        admin: "/admin"
+        api: "/api"
 
 services:
     # default configuration for services in *this* file
@@ -85,5 +89,6 @@ services:
                   event: kernel.request,
                   method: onKernelRequest,
               }
+        arguments: ["%context%"]
 #sensio_framework_extra.view.listener:
 #   alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener

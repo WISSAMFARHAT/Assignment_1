@@ -21,16 +21,16 @@
             <ul class="navbar-nav ">
             {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
-                   <a class="nav-link  font-weight-bold {% if name is defined %} {% if name == 'students' %} active {%endif%}  {%endif%} " aria-current="page" href="{{ path('Page',{'user':'admin','pages':'students'}) }}"><h6>Students</h6></a>
+                   <a class="nav-link  font-weight-bold {% if name is defined %} {% if name == 'students' %} active {%endif%}  {%endif%} " aria-current="page" href="{{ path('Page',{'pages':'students'}) }}"><h6>Students</h6></a>
                 </li>
             {%endif%}
             {% if is_granted('ROLE_ADMIN') %}   
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold {% if name is defined %} {% if name == 'Classes' %} active {%endif%}  {%endif%}" href="{{ path('Page',{'user':'admin','pages':'Classes'}) }}"><h6>Classes</h6></a>
+                    <a class="nav-link font-weight-bold {% if name is defined %} {% if name == 'Classes' %} active {%endif%}  {%endif%}" href="{{ path('Page',{'pages':'Classes'}) }}"><h6>Classes</h6></a>
                 </li>
              {%endif%}  
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold {% if name is defined %} {% if name == 'Courses' %} active {%endif%}  {%endif%}" href="{{ path('Page',{'user':'admin','pages':'Courses'}) }}"><h6>Courses</h6></a>
+                    <a class="nav-link font-weight-bold {% if name is defined %} {% if name == 'Courses' %} active {%endif%}  {%endif%}" href="{{ path('Page',{'pages':'Courses'}) }}"><h6>Courses</h6></a>
                 </li>
               
             </ul>    

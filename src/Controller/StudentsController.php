@@ -54,7 +54,10 @@ class StudentsController extends AbstractController
      */
     public function Logout(Request $request)
         {
+            
         }
+       
+
 /**
      * @Route("/", name="home")
      */
@@ -62,7 +65,6 @@ class StudentsController extends AbstractController
     {
 
         $user = $this->getUser();
-        dump($user);
         
             return $this->render('students/index.html.twig');
     }

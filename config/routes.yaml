@@ -2,11 +2,5 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-admin:
-  prefix: /{user}
-  type: annotation
-  resource: App\Controller\AdminController
-
-Page:
-  path: /{user}/{pages}
-  controller: App\Controller\AdminController::Student
+route:
+  resource: "../config/routes/routing_config.yaml"

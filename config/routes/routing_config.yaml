@@ -1,0 +1,4 @@
+admin:
+  resource: App\Controller\AdminController
+  type: annotation
+  prefix: /%app.route_prefix%

@@ -31,10 +31,11 @@ class AdminController extends AbstractController
 {
 
     /**
-     * @name="Page"
+     * @Route("/{pages}",name="Page")
       */
     public function Student(String $pages,PaginatorInterface $paginator,Request $request)
     {
+        
         if($pages=='students'){
         $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
         foreach($select as $key=>$value ){
