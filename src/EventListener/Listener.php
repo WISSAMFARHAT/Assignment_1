@@ -19,13 +19,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
     {
         $this->parameters=$paramValue;
     }
-    
+
 
     public function onKernelRequest(RequestEvent $event)
     {
-        
         $request   = $event->getRequest();
         $router  = $request->getPathInfo();
+
         if (0 === strpos($request->headers->get('Content-Type'), 'application/json'))
         {
             $data = json_decode($request->getContent(), true);
@@ -35,13 +35,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
             }
             $request->request->replace($data);
        }
-       foreach($this->parameters as $parameter){
-       if(strpos($request->getPathInfo(),$parameter) === 0){
-        $request->attributes->set('context', 'admin');
-        }elseif (strpos($request->getPathInfo(), $parameter) === 0) {
-            $request->attributes->set('context', 'API');
-        }
-    }
+        $url=explode("/",$request->getPathInfo());
+        
+       if ( in_array("/".$url[1], $this->parameters)) {
+       {
+        $request->attributes->set('context', $url[1]);
+         }
+       }
     }
 
     protected function transformJsonBody(Request $request)

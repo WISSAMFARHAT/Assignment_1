@@ -35,8 +35,8 @@ class AdminController extends AbstractController
       */
     public function Student(String $pages,PaginatorInterface $paginator,Request $request)
     {
-        
         if($pages=='students'){
+
         $select = $this->getDoctrine()->getRepository(Student::class)->findAll();
         foreach($select as $key=>$value ){
             if($value->getImage() !=null){
@@ -45,6 +45,7 @@ class AdminController extends AbstractController
 
         }
         return $this->render('students/student.html.twig',array('name' => $pages,'select' =>$select));
+
         }elseif($pages=='Classes'){
 
             $select = $this->getDoctrine()->getRepository(Classe::class)->findAll();
@@ -277,9 +278,11 @@ class AdminController extends AbstractController
         }
     return $this->render('students/course_insert_update.html.twig',array("name"=>"Update","Page"=>'Course','image'=>$Course,'id'=>$id,'editForm'=>$form->createView()));
     }
+
      /**
      * @Route("/Courses/{name}",name="insert_course")
      */
+
     public function insert_Course(String $name,Request $request)
     {
         $Course=new Course();
@@ -290,7 +293,8 @@ class AdminController extends AbstractController
             $entityManager->persist($Course);
             $entityManager->flush();
         }
-        return $this->render('students/course_insert_update.html.twig',array("name"=>$name,"Page"=>'Course',"form"=>$form->createView()));
+        return $this->render('students/course_insert_update.html.twig',
+        array("name"=>$name,"Page"=>'Course',"form"=>$form->createView()));
 
     }
     /**
